@@ -13,8 +13,10 @@ class CustomButton extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 255, 171, 75),
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-
-        minimumSize: Size(MediaQuery.sizeOf(context).width, 56),
+        fixedSize:
+            MediaQuery.of(context).size.width >= 768
+                ? Size(MediaQuery.of(context).size.width / 2.5, 56)
+                : Size(MediaQuery.of(context).size.width, 56),
       ),
       onPressed: onPressed,
       child: CustomText(

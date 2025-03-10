@@ -9,7 +9,7 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // constraints: BoxConstraints.expand(),
+        constraints: BoxConstraints.expand(),
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(color: Color.fromARGB(255, 57, 57, 57)),
         child: Column(
