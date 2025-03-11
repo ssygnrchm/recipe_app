@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/presentation/pages/home_page.dart';
+import 'package:food_delivery_app/presentation/pages/home_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_button.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         constraints: BoxConstraints.expand(),
         padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(color: Color.fromARGB(255, 57, 57, 57)),
+        // decoration: BoxDecoration(color: Color.fromARGB(255, 57, 57, 57)),
         child: Column(
           spacing: 24,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,9 +43,9 @@ class WelcomePage extends StatelessWidget {
               child: CustomButton(
                 title: "Order Now!",
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
                   );
                 },
               ),

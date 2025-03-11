@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 57, 57, 57),
+      // bottomNavigationBar: Bottom,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -32,6 +32,7 @@ class HomePage extends StatelessWidget {
               ),
               Text("data"),
               Text("data"),
+              ElevatedButton(onPressed: () {}, child: Text('data')),
             ],
           ),
         ),
