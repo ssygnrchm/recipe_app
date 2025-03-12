@@ -7,8 +7,8 @@ class FoodCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xFF292929),
       body: Stack(
         children: [
           // Orange circle background

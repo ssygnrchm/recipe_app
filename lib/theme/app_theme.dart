@@ -10,11 +10,11 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       brightness: Brightness.light,
-      primaryColor: AppColors.active,
+      primaryColor: AppColors.warning,
       scaffoldBackgroundColor: Colors.white,
       cardColor: Colors.white,
       colorScheme: ColorScheme.light(
-        primary: AppColors.active,
+        primary: AppColors.warning,
         secondary: AppColors.accentBlue,
         error: AppColors.danger,
         background: Colors.white,
@@ -39,7 +39,7 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.active,
+          backgroundColor: AppColors.warning,
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -49,8 +49,8 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.active,
-          side: BorderSide(color: AppColors.active),
+          foregroundColor: AppColors.warning,
+          side: BorderSide(color: AppColors.warning),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           textStyle: AppTextStyles.buttonMedium,
@@ -58,7 +58,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.active,
+          foregroundColor: AppColors.warning,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           textStyle: AppTextStyles.buttonMedium,
         ),
@@ -97,7 +97,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.active, width: 2),
+          borderSide: BorderSide(color: AppColors.warning, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -120,8 +120,8 @@ class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.inkLightest,
         disabledColor: AppColors.inkLight,
-        selectedColor: AppColors.active,
-        secondarySelectedColor: AppColors.active,
+        selectedColor: AppColors.warning,
+        secondarySelectedColor: AppColors.warning,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         labelStyle: AppTextStyles.paragraphSmall,
         secondaryLabelStyle: AppTextStyles.paragraphSmall,
@@ -135,11 +135,11 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
-      primaryColor: AppColors.active,
+      primaryColor: AppColors.warning,
       scaffoldBackgroundColor: Color(0xFF121212),
       cardColor: Color(0xFF1E1E1E),
       colorScheme: ColorScheme.dark(
-        primary: AppColors.active,
+        primary: AppColors.warning,
         secondary: AppColors.accentBlue,
         error: AppColors.danger,
         background: Color(0xFF121212),
@@ -167,7 +167,7 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.active,
+          backgroundColor: AppColors.warning,
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -178,7 +178,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.white,
-          side: BorderSide(color: AppColors.active),
+          side: BorderSide(color: AppColors.warning),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           textStyle: AppTextStyles.buttonMedium,
@@ -186,7 +186,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.active,
+          foregroundColor: AppColors.warning,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           textStyle: AppTextStyles.buttonMedium,
         ),
@@ -267,7 +267,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.active, width: 2),
+          borderSide: BorderSide(color: AppColors.warning, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -290,8 +290,8 @@ class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor: Color(0xFF2A2A2A),
         disabledColor: Color(0xFF3A3A3A),
-        selectedColor: AppColors.active,
-        secondarySelectedColor: AppColors.active,
+        selectedColor: AppColors.warning,
+        secondarySelectedColor: AppColors.warning,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         labelStyle: AppTextStyles.withColor(
           AppTextStyles.paragraphSmall,
@@ -320,7 +320,7 @@ class AppTheme {
   // Custom Button Styles
   static ButtonStyle get primaryButtonStyle {
     return ElevatedButton.styleFrom(
-      backgroundColor: AppColors.active,
+      backgroundColor: AppColors.warning,
       foregroundColor: Colors.white,
       elevation: 0,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -365,7 +365,7 @@ class AppTheme {
   // Download button style based on your design mockups
   static ButtonStyle downloadButtonStyle({bool isDark = false}) {
     return ElevatedButton.styleFrom(
-      backgroundColor: isDark ? AppColors.active : AppColors.inkDarkest,
+      backgroundColor: isDark ? AppColors.warning : AppColors.inkDarkest,
       foregroundColor: Colors.white,
       elevation: 0,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

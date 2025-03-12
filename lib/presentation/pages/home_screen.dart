@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
 import 'package:food_delivery_app/presentation/pages/food_category_screen.dart';
+import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       bottomNavigationBar: const CustomBottomNavigationBar(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -30,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                       child: SearchBar(
                         hintText: "Dishes, restaurants or cuisines",
                         leading: const Icon(Icons.search),
-                        padding: MaterialStateProperty.all(
+                        padding: WidgetStateProperty.all(
                           const EdgeInsets.symmetric(horizontal: 16),
                         ),
                       ),
@@ -41,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Popular Categories Section
-                const Text("Popular categories", style: AppTextStyles.heading2),
+                CustomText.h1(context, "Popular Categories"),
 
                 const SizedBox(height: 16),
 
@@ -68,10 +70,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Special Menu Section
-                const Text(
-                  "Today's special menu",
-                  style: AppTextStyles.heading2,
-                ),
+                CustomText.h1(context, "Today's special menu"),
 
                 const SizedBox(height: 16),
 
@@ -105,10 +104,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Featured Restaurants Section
-                const Text(
-                  "Featured restaurants",
-                  style: AppTextStyles.heading2,
-                ),
+                CustomText.h1(context, "Featured restaurants"),
 
                 const SizedBox(height: 16),
 
