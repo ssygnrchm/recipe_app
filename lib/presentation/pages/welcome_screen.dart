@@ -39,13 +39,13 @@ class WelcomeScreen extends StatelessWidget {
                   // Use theme text styles instead of hardcoded styles
                   CustomText.h1(
                     context,
-                    "Your Favorite Food, Delivered Fast",
+                    "Your Favorite Recipe, Cook Deliciously!",
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   CustomText.bodySmall(
                     context,
-                    "Find the best restaurants in your city and get it delivered to your place!",
+                    "Find the best recipes in all over the world!",
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -57,7 +57,7 @@ class WelcomeScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 56),
               child: CustomButton(
-                title: "Order Now!",
+                title: "Enter Now!",
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/data/recipe_model.dart';
 import 'package:food_delivery_app/domain/recipe_repository.dart';
 import 'package:food_delivery_app/presentation/pages/recipe_screen.dart';
+import 'package:food_delivery_app/presentation/widgets/recipe_list_widget.dart';
 
 class RecipesListScreen extends StatefulWidget {
   const RecipesListScreen({super.key});
@@ -89,7 +90,6 @@ class _RecipesListScreenState extends State<RecipesListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('My Recipes')),
       body:
@@ -115,105 +115,15 @@ class _RecipesListScreenState extends State<RecipesListScreen> {
                   ],
                 ),
               )
-              : listRecipe(),
+              : RecipeListWidget(
+                recipes: _recipes,
+                onEdit: _createOrEditRecipe,
+                onDelete: _deleteRecipe,
+              ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _createOrEditRecipe(null),
         child: const Icon(Icons.add),
       ),
-    );
-  }
-
-  ListView listRecipe() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: _recipes.length,
-      itemBuilder: (context, index) {
-        final recipe = _recipes[index];
-        return Card(
-          margin: const EdgeInsets.only(bottom: 16),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Recipe image
-              if (recipe.imagePath != null)
-                Image.asset(
-                  recipe.imagePath!,
-                  height: 150,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
-                ),
-
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Recipe name
-                    Text(
-                      recipe.name,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-
-                    if (recipe.description != null &&
-                        recipe.description!.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8, bottom: 8),
-                        child: Text(
-                          recipe.description!,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-
-                    // Recipe details
-                    Row(
-                      children: [
-                        if (recipe.cookTime != null && recipe.cookTime! > 0)
-                          Chip(
-                            avatar: const Icon(Icons.timer_outlined, size: 16),
-                            label: Text('${recipe.cookTime} min'),
-                          ),
-                        const SizedBox(width: 8),
-                        if (recipe.servings != null && recipe.servings! > 0)
-                          Chip(
-                            avatar: const Icon(Icons.people_outlined, size: 16),
-                            label: Text('${recipe.servings} servings'),
-                          ),
-                      ],
-                    ),
-
-                    // Recipe actions
-                    OverflowBar(
-                      alignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton.icon(
-                          onPressed: () => _createOrEditRecipe(recipe),
-                          icon: const Icon(Icons.edit_outlined),
-                          label: const Text('EDIT'),
-                        ),
-                        TextButton.icon(
-                          onPressed: () => _deleteRecipe(recipe),
-                          icon: const Icon(
-                            Icons.delete_outlined,
-                            color: Colors.red,
-                          ),
-                          label: const Text('DELETE'),
-                          style: TextButton.styleFrom(
-                            foregroundColor:
-                                Theme.of(context).colorScheme.error,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
