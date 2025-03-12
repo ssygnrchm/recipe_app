@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
-import 'package:food_delivery_app/theme/app_theme.dart';
+import 'package:food_delivery_app/core/theme/app_theme.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({

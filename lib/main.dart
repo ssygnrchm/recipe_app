@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/presentation/pages/welcome_screen.dart';
-import 'package:food_delivery_app/theme/app_theme.dart';
+import 'package:food_delivery_app/core/theme/app_theme.dart';
 
 void main() {
   runApp(const MainApp());

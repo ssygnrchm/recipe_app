@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
+import 'package:food_delivery_app/data/recipe_model.dart';
+import 'package:food_delivery_app/domain/database_helper.dart';
 
 class RecipeScreen extends StatefulWidget {
-  final Map<String, dynamic>?
-  existingRecipe; // Pass existing recipe for editing
+  final Recipe? existingRecipe; // Modified to use Recipe model instead of Map
 
   const RecipeScreen({super.key, this.existingRecipe});
 
@@ -22,6 +23,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
   List<Map<String, dynamic>> _ingredients = [];
   int _selectedImageIndex = 0;
+  bool _isSaving = false;
 
   // Sample recipe images (in a real app, these would be loaded from assets or API)
   final List<String> _recipeImages = [
@@ -37,22 +39,26 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
     // Populate form if editing an existing recipe
     if (widget.existingRecipe != null) {
-      _nameController.text = widget.existingRecipe!['name'] ?? '';
-      _descriptionController.text = widget.existingRecipe!['description'] ?? '';
+      _nameController.text = widget.existingRecipe!.name;
+      _descriptionController.text = widget.existingRecipe!.description ?? '';
       _cookTimeController.text =
-          widget.existingRecipe!['cookTime']?.toString() ?? '';
+          widget.existingRecipe!.cookTime?.toString() ?? '';
       _servingsController.text =
-          widget.existingRecipe!['servings']?.toString() ?? '';
+          widget.existingRecipe!.servings?.toString() ?? '';
 
-      if (widget.existingRecipe!['ingredients'] != null) {
-        _ingredients = List<Map<String, dynamic>>.from(
-          widget.existingRecipe!['ingredients'],
-        );
-      }
+      // Convert ingredients from model to map
+      _ingredients =
+          widget.existingRecipe!.ingredients
+              .map(
+                (ingredient) => {
+                  'name': ingredient.name,
+                  'amount': ingredient.amount ?? '',
+                  'unit': ingredient.unit ?? 'g',
+                },
+              )
+              .toList();
 
-      if (widget.existingRecipe!['imageIndex'] != null) {
-        _selectedImageIndex = widget.existingRecipe!['imageIndex'];
-      }
+      _selectedImageIndex = widget.existingRecipe!.imageIndex;
     } else {
       // Add one empty ingredient for new recipes
       _ingredients.add({'name': '', 'amount': '', 'unit': 'g'});
@@ -88,23 +94,49 @@ class _RecipeScreenState extends State<RecipeScreen> {
     });
   }
 
-  void _saveRecipe() {
+  Future<void> _saveRecipe() async {
     if (_formKey.currentState!.validate()) {
-      // Create recipe object
-      final recipe = {
-        'name': _nameController.text,
-        'description': _descriptionController.text,
-        'cookTime': int.tryParse(_cookTimeController.text) ?? 0,
-        'servings': int.tryParse(_servingsController.text) ?? 1,
-        'ingredients': _ingredients,
-        'imageIndex': _selectedImageIndex,
-        'imagePath': _recipeImages[_selectedImageIndex],
-      };
+      setState(() {
+        _isSaving = true;
+      });
 
-      // In a real app, you would save this to a database or state management
-      // For example: context.read<RecipeProvider>().saveRecipe(recipe);
+      try {
+        // Create recipe object
+        final recipeData = {
+          'name': _nameController.text,
+          'description': _descriptionController.text,
+          'cookTime': int.tryParse(_cookTimeController.text) ?? 0,
+          'servings': int.tryParse(_servingsController.text) ?? 1,
+          'ingredients': _ingredients,
+          'imageIndex': _selectedImageIndex,
+          'imagePath': _recipeImages[_selectedImageIndex],
+        };
 
-      Navigator.pop(context, recipe);
+        final dbHelper = DatabaseHelper.instance;
+
+        if (widget.existingRecipe != null) {
+          // Update existing recipe
+          await dbHelper.updateRecipe(widget.existingRecipe!.id!, recipeData);
+        } else {
+          // Insert new recipe
+          await dbHelper.insertRecipe(recipeData);
+        }
+
+        if (mounted) {
+          Navigator.pop(context, true); // Return true to indicate success
+        }
+      } catch (e) {
+        // Show error message
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error saving recipe: $e')));
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isSaving = false;
+          });
+        }
+      }
     }
   }
 
@@ -119,9 +151,16 @@ class _RecipeScreenState extends State<RecipeScreen> {
         ),
         actions: [
           TextButton.icon(
-            onPressed: _saveRecipe,
-            icon: const Icon(Icons.check),
-            label: const Text('Save'),
+            onPressed: _isSaving ? null : _saveRecipe,
+            icon:
+                _isSaving
+                    ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                    : const Icon(Icons.check),
+            label: Text(_isSaving ? 'Saving...' : 'Save'),
           ),
         ],
       ),
@@ -273,20 +312,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 );
               },
             ),
-
-            const SizedBox(height: 32),
-
-            // Save button
-            // ElevatedButton.icon(
-            //   onPressed: _saveRecipe,
-            //   icon: const Icon(Icons.save),
-            //   label: Text(
-            //     widget.existingRecipe != null
-            //         ? 'Update Recipe'
-            //         : 'Create Recipe',
-            //   ),
-            //   style: theme.elevatedButtonTheme.style,
-            // ),
           ],
         ),
       ),

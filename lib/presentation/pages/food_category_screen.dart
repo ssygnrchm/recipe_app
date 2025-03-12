@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
-import 'package:food_delivery_app/theme/app_theme.dart';
+import 'package:food_delivery_app/core/theme/app_theme.dart';
 
 class FoodCategoryScreen extends StatelessWidget {
   const FoodCategoryScreen({super.key});

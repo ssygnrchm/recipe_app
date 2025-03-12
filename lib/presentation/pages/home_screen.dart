@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
+import 'package:food_delivery_app/presentation/pages/food_category_screen.dart';
+import 'package:food_delivery_app/presentation/pages/recipe_list_screen.dart';
 import 'package:food_delivery_app/presentation/pages/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/category_card.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_bottom_navigation_bar.dart';
@@ -50,16 +52,32 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Categories Cards
-                const Row(
+                Row(
                   children: [
                     CategoryCard(
                       icon: Assets.pizzaIcon,
                       color: Color(0xFFFFE6D4),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (contex) => RecipesListScreen(),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(width: 12),
                     CategoryCard(
                       icon: Assets.saladIcon,
                       color: Color(0xFFFFF0CE),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (contex) => FoodCategoryScreen(),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(width: 12),
                     CategoryCard(
