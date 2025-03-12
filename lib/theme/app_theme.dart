@@ -136,7 +136,7 @@ class AppTheme {
     return ThemeData(
       brightness: Brightness.dark,
       primaryColor: AppColors.warning,
-      scaffoldBackgroundColor: Color(0xFF121212),
+      scaffoldBackgroundColor: AppColors.inkDarkest,
       cardColor: Color(0xFF1E1E1E),
       colorScheme: ColorScheme.dark(
         primary: AppColors.warning,
@@ -144,7 +144,7 @@ class AppTheme {
         error: AppColors.danger,
         background: Color(0xFF121212),
         surface: Color(0xFF1E1E1E),
-        onPrimary: Colors.white,
+        onPrimary: AppColors.inkDarkest,
         onSecondary: Colors.white,
         onSurface: Colors.white,
         onBackground: Colors.white,

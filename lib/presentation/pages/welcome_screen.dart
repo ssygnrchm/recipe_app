@@ -59,7 +59,7 @@ class WelcomeScreen extends StatelessWidget {
               child: CustomButton(
                 title: "Order Now!",
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const HomeScreen()),
                   );
