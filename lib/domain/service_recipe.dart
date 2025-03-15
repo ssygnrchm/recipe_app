@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:food_delivery_app/data/api_recipe_model.dart';
 import 'package:food_delivery_app/data/recipe_per_category_model.dart';
 import 'package:food_delivery_app/domain/repo_recipe_category.dart';
 // import 'package:http/http.dart' as http;
@@ -20,16 +21,33 @@ Future<RecipePerCategory> fetchRecipePerCategory(String category) async {
   }
 }
 
-Future<Meal> fetchRandomRecipe() async {
+Future<SingleRecipe> fetchRandomRecipe() async {
   final response = await fetchRandomRecipeAPI();
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return Meal.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return SingleRecipe.fromJson(
+      jsonDecode(response.body) as Map<String, dynamic>,
+    );
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
     throw Exception('Failed to load Random Recipe');
   }
+}
+
+// Added method to load multiple random recipes
+Future<List<SingleRecipe>> loadRandomRecipes(int count) async {
+  List<SingleRecipe> recipes = []; //create a list with singlerecipes object
+  for (int i = 0; i < count; i++) {
+    try {
+      SingleRecipe recipe = await fetchRandomRecipe();
+      recipes.add(recipe);
+      print(recipes);
+    } catch (e) {
+      print('Error fetching random recipe: $e');
+    }
+  }
+  return recipes;
 }

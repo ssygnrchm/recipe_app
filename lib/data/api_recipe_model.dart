@@ -1,4 +1,4 @@
-class Meal {
+class SingleRecipe {
   String idMeal;
   String strMeal;
   String? strMealAlternate;
@@ -15,7 +15,7 @@ class Meal {
   bool? strCreativeCommonsConfirmed;
   String? dateModified;
 
-  Meal({
+  SingleRecipe({
     required this.idMeal,
     required this.strMeal,
     this.strMealAlternate,
@@ -34,7 +34,7 @@ class Meal {
   });
 
   // Factory method to create an instance of Meal from JSON
-  factory Meal.fromJson(Map<String, dynamic> json) {
+  factory SingleRecipe.fromJson(Map<String, dynamic> json) {
     List<String> ingredients = [];
     List<String> measures = [];
 
@@ -48,7 +48,7 @@ class Meal {
       }
     }
 
-    return Meal(
+    return SingleRecipe(
       idMeal: json['idMeal'],
       strMeal: json['strMeal'],
       strMealAlternate: json['strMealAlternate'],
@@ -92,5 +92,47 @@ class Meal {
     }
 
     return data;
+  }
+
+  // Getter to get a formatted string of all ingredients with their measures
+  String get ingredientsWithMeasures {
+    String result = '';
+    for (int i = 0; i < ingredients.length; i++) {
+      result += '${ingredients[i]} - ${measures[i]}\n';
+    }
+    return result;
+  }
+
+  // Getter to get a full meal description including ingredients and instructions
+  String get fullMealDescription {
+    return '''
+    Meal: $strMeal
+    Category: $strCategory
+    Area: $strArea
+    Instructions: $strInstructions
+    
+    Ingredients:
+    $ingredientsWithMeasures
+    ''';
+  }
+
+  // Getter to check if the meal has video source
+  bool get hasVideo {
+    return strYoutube.isNotEmpty;
+  }
+
+  // Getter to get a formatted list of tags
+  List<String> get tagsList {
+    return strTags.split(',').map((tag) => tag.trim()).toList();
+  }
+
+  // Getter to get the primary ingredient (just the first one in the list)
+  String get primaryIngredient {
+    return ingredients.isNotEmpty ? ingredients[0] : 'No ingredients available';
+  }
+
+  // Getter to check if the meal is vegetarian
+  bool get isVegetarian {
+    return strCategory.toLowerCase().contains('vegetarian');
   }
 }
