@@ -6,3 +6,8 @@ Future<http.Response> fetchRecipePerCategoryAPI(String category) {
   print('${Endpoint.baseUrl}/filter.php?c=${_category}');
   return http.get(Uri.parse('${Endpoint.baseUrl}/filter.php?c=${_category}'));
 }
+
+Future<http.Response> fetchRandomRecipeAPI() {
+  print('${Endpoint.baseUrl}/random.php');
+  return http.get(Uri.parse('${Endpoint.baseUrl}/random.php'));
+}

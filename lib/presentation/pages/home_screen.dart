@@ -133,7 +133,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Popular Categories Section
-                CustomText.h1(context, "Popular Categories"),
+                CustomText.h1(context, "All Categories"),
 
                 const SizedBox(height: 16),
 
