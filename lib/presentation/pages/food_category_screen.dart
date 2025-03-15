@@ -1,11 +1,16 @@
+// lib/presentation/pages/food_category_screen.dart
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
+import 'package:food_delivery_app/data/recipe_per_category_model.dart';
+import 'package:food_delivery_app/domain/service_recipe.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 import 'package:food_delivery_app/core/theme/app_theme.dart';
 
 class FoodCategoryScreen extends StatelessWidget {
-  const FoodCategoryScreen({super.key});
+  final String categoryName;
+
+  const FoodCategoryScreen({super.key, required this.categoryName});
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +77,11 @@ class FoodCategoryScreen extends StatelessWidget {
                         ],
                       ),
 
-                      // Fast Food title
+                      // Category title
                       Padding(
                         padding: const EdgeInsets.only(top: 16, bottom: 16),
                         child: CustomText(
-                          title: "Fast Food",
+                          title: categoryName,
                           style: AppTextStyles.display1,
                         ),
                       ),
@@ -84,59 +89,57 @@ class FoodCategoryScreen extends StatelessWidget {
                   ),
                 ),
 
-                // Illustration
-                SizedBox(
-                  height: 180,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/fast_food_illustration.png',
-                      // Fallback if image not available
-                      errorBuilder:
-                          (context, error, stackTrace) => Icon(
-                            Icons.fastfood,
-                            size: 100,
-                            color: theme.colorScheme.secondary,
-                          ),
-                    ),
-                  ),
-                ),
-
-                // Grid of food categories
+                // API data loading and display
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 0.9,
-                      children: [
-                        FoodCategoryCard(
-                          title: "Pizza",
-                          price: "\$6",
-                          iconData: Icons.local_pizza,
-                          backgroundColor: const Color(0xFFFFE6D4),
+                  child: FutureBuilder<RecipePerCategory>(
+                    future: fetchRecipePerCategory(categoryName),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: CustomText(
+                            title: "Error: ${snapshot.error}",
+                            fcolor: theme.colorScheme.error,
+                          ),
+                        );
+                      } else if (!snapshot.hasData ||
+                          snapshot.data?.meals == null ||
+                          snapshot.data!.meals!.isEmpty) {
+                        return Center(
+                          child: CustomText(
+                            title: "No recipes found for $categoryName",
+                            style: AppTextStyles.paragraphMedium,
+                          ),
+                        );
+                      }
+
+                      final recipes = snapshot.data!.meals!;
+
+                      return Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                                childAspectRatio: 0.9,
+                              ),
+                          itemCount: recipes.length,
+                          itemBuilder: (context, index) {
+                            final recipe = recipes[index];
+                            return RecipeCard(
+                              title: recipe.strMeal ?? "Unknown",
+                              imageUrl: recipe.strMealThumb ?? "",
+                              recipeId: recipe.idMeal ?? "",
+                              // Generate a random color for each recipe card
+                              backgroundColor: _getRandomColor(index),
+                            );
+                          },
                         ),
-                        FoodCategoryCard(
-                          title: "Taco",
-                          price: "\$12",
-                          iconData: Icons.lunch_dining,
-                          backgroundColor: const Color(0xFFFFF0CE),
-                        ),
-                        FoodCategoryCard(
-                          title: "Chinese",
-                          price: "\$9",
-                          iconData: Icons.ramen_dining,
-                          backgroundColor: const Color(0xFFD2F4E8),
-                        ),
-                        FoodCategoryCard(
-                          title: "Chicken",
-                          price: "\$10",
-                          iconData: Icons.set_meal,
-                          backgroundColor: const Color(0xFFE2DDFF),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -146,19 +149,30 @@ class FoodCategoryScreen extends StatelessWidget {
       ),
     );
   }
+
+  // Function to generate a random color based on index
+  Color _getRandomColor(int index) {
+    final colors = [
+      const Color(0xFFFFE6D4),
+      const Color(0xFFFFF0CE),
+      const Color(0xFFD2F4E8),
+      const Color(0xFFE2DDFF),
+    ];
+    return colors[index % colors.length];
+  }
 }
 
-class FoodCategoryCard extends StatelessWidget {
+class RecipeCard extends StatelessWidget {
   final String title;
-  final String price;
-  final IconData iconData;
+  final String imageUrl;
+  final String recipeId;
   final Color backgroundColor;
 
-  const FoodCategoryCard({
+  const RecipeCard({
     super.key,
     required this.title,
-    required this.price,
-    required this.iconData,
+    required this.imageUrl,
+    required this.recipeId,
     required this.backgroundColor,
   });
 
@@ -174,104 +188,87 @@ class FoodCategoryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title and price
+          // Title
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText.h2(context, title),
+                CustomText(
+                  title: title,
+                  style: AppTextStyles.paragraphMediumBold,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
+                GestureDetector(
+                  onTap: () {
+                    // TODO: Navigate to recipe details
+                    // For now, just show the recipe ID
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Recipe ID: $recipeId')),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: CustomText.bodySmall(context, 'View Details'),
                   ),
-                  decoration: BoxDecoration(
-                    color: theme.cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: CustomText.bodySmall(context, price),
                 ),
               ],
             ),
           ),
 
-          // Food icon
+          // Recipe image
           Expanded(
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: FoodIcon(iconData: iconData),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child:
+                    imageUrl.isNotEmpty
+                        ? Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value:
+                                    loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(
+                              Icons.restaurant,
+                              size: 60,
+                              color: theme.colorScheme.primary,
+                            );
+                          },
+                        )
+                        : Icon(
+                          Icons.restaurant,
+                          size: 60,
+                          color: theme.colorScheme.primary,
+                        ),
               ),
             ),
           ),
         ],
       ),
     );
-  }
-}
-
-class FoodIcon extends StatelessWidget {
-  final IconData iconData;
-
-  const FoodIcon({super.key, required this.iconData});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final primaryColor = theme.colorScheme.primary;
-
-    // Custom styling for each food icon
-    switch (iconData) {
-      case Icons.local_pizza:
-        return Icon(
-          Icons.local_pizza,
-          size: 60,
-          color:
-              theme.brightness == Brightness.light
-                  ? Colors.deepOrange
-                  : primaryColor,
-        );
-      case Icons.lunch_dining:
-        return Icon(Icons.lunch_dining, size: 60, color: primaryColor);
-      case Icons.ramen_dining:
-        return Stack(
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: theme.cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.ramen_dining,
-                  size: 30,
-                  color: theme.colorScheme.error,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Icon(
-                Icons.dinner_dining,
-                size: 20,
-                color: theme.colorScheme.primary,
-              ),
-            ),
-          ],
-        );
-      case Icons.set_meal:
-        return Transform.rotate(
-          angle: 0.5,
-          child: Icon(Icons.escalator_warning, size: 60, color: primaryColor),
-        );
-      default:
-        return Icon(iconData, size: 60, color: primaryColor);
-    }
   }
 }

@@ -12,6 +12,92 @@ import 'package:food_delivery_app/presentation/widgets/restaurant_card.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  List<Widget> _buildCategoryList(BuildContext context) {
+    final List<Map<String, dynamic>> categories = [
+      {
+        "name": "Beef",
+        "icon": Icons.kebab_dining,
+        "color": Colors.redAccent.shade100,
+      },
+      {
+        "name": "Chicken",
+        "icon": Icons.egg_alt,
+        "color": Colors.orangeAccent.shade100,
+      },
+      {
+        "name": "Dessert",
+        "icon": Icons.cake,
+        "color": Colors.pinkAccent.shade100,
+      },
+      {
+        "name": "Lamb",
+        "icon": Icons.set_meal,
+        "color": Colors.deepPurpleAccent.shade100,
+      },
+      {
+        "name": "Pasta",
+        "icon": Icons.ramen_dining,
+        "color": Colors.amberAccent.shade100,
+      },
+      {
+        "name": "Seafood",
+        "icon": Icons.set_meal_rounded,
+        "color": Colors.blueAccent.shade100,
+      },
+      {
+        "name": "Breakfast",
+        "icon": Icons.free_breakfast,
+        "color": Colors.tealAccent.shade100,
+      },
+      {
+        "name": "Vegetarian",
+        "icon": Icons.grass,
+        "color": Colors.greenAccent.shade100,
+      },
+    ];
+
+    List<Widget> categoryWidgets = [];
+
+    for (int i = 0; i < categories.length; i++) {
+      categoryWidgets.add(
+        Padding(
+          padding: EdgeInsets.only(right: i == categories.length - 1 ? 0 : 12),
+          child: Column(
+            children: [
+              CategoryCard(
+                icon: Icon(
+                  categories[i]["icon"],
+                  size: 32,
+                  color: Colors.white,
+                ),
+                color: categories[i]["color"],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => FoodCategoryScreen(
+                            categoryName: categories[i]["name"],
+                          ),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 8),
+              CustomText(
+                title: categories[i]["name"],
+                fsize: 12,
+                fweight: FontWeight.w500,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return categoryWidgets;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -51,40 +137,13 @@ class HomeScreen extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // Categories Cards
-                Row(
-                  children: [
-                    CategoryCard(
-                      icon: Assets.pizzaIcon,
-                      color: Color(0xFFFFE6D4),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (contex) => RecipesListScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(width: 12),
-                    CategoryCard(
-                      icon: Assets.saladIcon,
-                      color: Color(0xFFFFF0CE),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (contex) => FoodCategoryScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(width: 12),
-                    CategoryCard(
-                      icon: Assets.burgerIcon,
-                      color: Color(0xFFD2F4E8),
-                    ),
-                  ],
+                // Categories Cards - Horizontally scrollable list
+                SizedBox(
+                  height: 100, // Set a fixed height for the list
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(children: _buildCategoryList(context)),
+                  ),
                 ),
 
                 const SizedBox(height: 24),
