@@ -145,6 +145,8 @@ class HomeScreen extends StatelessWidget {
                   subtitle: "mexican",
                 ),
 
+                const SizedBox(height: 16),
+
                 FullWidthCard(
                   image: Assets.chickenImage,
                   title: "Five guys",
