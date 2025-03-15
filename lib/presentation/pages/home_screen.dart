@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
-import 'package:food_delivery_app/data/api_recipe_model.dart';
-import 'package:food_delivery_app/domain/service_recipe.dart';
+import 'package:food_delivery_app/api/data/model/api_recipe_model.dart';
+import 'package:food_delivery_app/api/repo/service_recipe.dart';
 import 'package:food_delivery_app/presentation/pages/food_category_screen.dart';
 import 'package:food_delivery_app/presentation/pages/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/category_card.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
-import 'package:food_delivery_app/presentation/widgets/full_width_card.dart';
+// import 'package:food_delivery_app/presentation/widgets/full_width_card.dart';
 import 'package:food_delivery_app/presentation/widgets/random_recipe_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -27,17 +27,17 @@ class HomeScreen extends StatelessWidget {
       {
         "name": "Dessert",
         "icon": Icons.cake,
-        "color": Colors.pinkAccent.shade100,
+        "color": const Color.fromARGB(255, 224, 125, 158),
       },
       {
         "name": "Lamb",
-        "icon": Icons.set_meal,
+        "icon": Icons.kebab_dining,
         "color": Colors.deepPurpleAccent.shade100,
       },
       {
         "name": "Pasta",
         "icon": Icons.ramen_dining,
-        "color": Colors.amberAccent.shade100,
+        "color": const Color.fromARGB(255, 255, 174, 127),
       },
       {
         "name": "Seafood",
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
       {
         "name": "Vegetarian",
         "icon": Icons.grass,
-        "color": Colors.greenAccent.shade100,
+        "color": const Color.fromARGB(255, 123, 196, 143),
       },
     ];
 
@@ -191,25 +191,61 @@ class HomeScreen extends StatelessWidget {
 
                 const SizedBox(height: 24),
 
-                // Featured Restaurants Section
+                // Featured Recipe Section
                 CustomText.h1(context, "Featured recipe"),
 
                 const SizedBox(height: 16),
 
-                // Featured Restaurant Card
-                FullWidthCard(
-                  image: Assets.chickenImage,
-                  title: "Five guys",
-                  subtitle: "mexican",
+                // Featured Recipe Card
+                SizedBox(
+                  height: 180,
+                  child: FutureBuilder<List<SingleRecipe>>(
+                    future: loadRandomRecipes(1), // Load 5 random recipes
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Error loading recipes: ${snapshot.error}',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        );
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('No recipes found'));
+                      } else {
+                        final recipes = snapshot.data!;
+                        return Column(
+                          children:
+                              recipes.map((recipe) {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: RandomRecipeCard(recipe: recipe),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                        );
+                      }
+                    },
+                  ),
                 ),
 
-                const SizedBox(height: 16),
+                //unchanged
+                // FullWidthCard(
+                //   image: Assets.tacosImage,
+                //   title: "Taco Bell",
+                //   subtitle: "mexican",
+                // ),
 
-                FullWidthCard(
-                  image: Assets.chickenImage,
-                  title: "Five guys",
-                  subtitle: "mexican",
-                ),
+                // const SizedBox(height: 16),
+
+                // FullWidthCard(
+                //   image: Assets.chickenImage,
+                //   title: "Five guys",
+                //   subtitle: "Turkish",
+                // ),
               ],
             ),
           ),

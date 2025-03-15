@@ -16,18 +16,6 @@ class WelcomeScreen extends StatelessWidget {
       body: Container(
         constraints: const BoxConstraints.expand(),
         padding: const EdgeInsets.all(16),
-        // Remove hardcoded decoration color, let theme handle it
-        // decoration: BoxDecoration(
-        //   // Create a gradient background
-        //   gradient: LinearGradient(
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //     colors: [
-        //       theme.colorScheme.background,
-        //       theme.colorScheme.primary.withOpacity(0.1),
-        //     ],
-        //   ),
-        // ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

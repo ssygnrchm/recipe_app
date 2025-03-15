@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
-import 'package:food_delivery_app/data/recipe_per_category_model.dart';
-import 'package:food_delivery_app/domain/service_recipe.dart';
+import 'package:food_delivery_app/api/data/model/recipe_per_category_model.dart';
+import 'package:food_delivery_app/api/repo/service_recipe.dart';
+import 'package:food_delivery_app/presentation/pages/recipe_details.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 import 'package:food_delivery_app/core/theme/app_theme.dart';
 
@@ -246,6 +247,14 @@ class RecipeCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 GestureDetector(
                   onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                RecipeDetailsScreen(recipeId: recipeId),
+                      ),
+                    );
                     // TODO: Navigate to recipe details
                     // For now, just show the recipe ID
                     ScaffoldMessenger.of(context).showSnackBar(

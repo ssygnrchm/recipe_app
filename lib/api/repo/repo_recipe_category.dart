@@ -1,4 +1,4 @@
-import 'package:food_delivery_app/domain/endpoint.dart';
+import 'package:food_delivery_app/api/endpoint.dart';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> fetchRecipePerCategoryAPI(String category) {
@@ -14,6 +14,8 @@ Future<http.Response> fetchRandomRecipeAPI() {
 
 Future<http.Response> fetchRecipeByIdAPI(String id) {
   final _id = id;
-  print('${Endpoint.baseUrl}//lookup.php?i=${_id}');
-  return http.get(Uri.parse('${Endpoint.baseUrl}/random.php'));
+  print('${Endpoint.baseUrl}/lookup.php?i=${_id}');
+  return http.get(
+    Uri.parse('${Endpoint.baseUrl}/lookup.php?i=${_id}'),
+  ); // Corrected endpoint
 }

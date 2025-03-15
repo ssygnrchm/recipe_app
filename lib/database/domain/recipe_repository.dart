@@ -1,5 +1,5 @@
-import 'package:food_delivery_app/data/recipe_model.dart';
-import 'package:food_delivery_app/domain/database_helper.dart';
+import 'package:food_delivery_app/database/data/recipe_model.dart';
+import 'package:food_delivery_app/database/domain/database_helper.dart';
 
 class RecipeRepository {
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;

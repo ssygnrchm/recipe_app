@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:food_delivery_app/data/api_recipe_model.dart';
-import 'package:food_delivery_app/data/recipe_per_category_model.dart';
-import 'package:food_delivery_app/domain/repo_recipe_category.dart';
+import 'package:food_delivery_app/api/data/model/api_recipe_model.dart';
+import 'package:food_delivery_app/api/data/model/recipe_per_category_model.dart';
+import 'package:food_delivery_app/api/repo/repo_recipe_category.dart';
 // import 'package:http/http.dart' as http;
 
 Future<RecipePerCategory> fetchRecipePerCategory(String category) async {
@@ -58,5 +58,19 @@ Future<List<SingleRecipe>> loadRandomRecipes(int count) async {
 
 Future<SingleRecipe> fetchRecipeById(String id) async {
   final response = await fetchRecipeByIdAPI(id);
-  // get data from api
+  if (response.statusCode == 200) {
+    // Parse the JSON
+    final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+
+    // Extract the recipe from the "meals" array
+    if (jsonData.containsKey('meals') &&
+        jsonData['meals'] is List &&
+        (jsonData['meals'] as List).isNotEmpty) {
+      return SingleRecipe.fromJson(jsonData['meals'][0]);
+    } else {
+      throw Exception('No recipe found with ID: $id');
+    }
+  } else {
+    throw Exception('Failed to load Recipe with ID: $id');
+  }
 }

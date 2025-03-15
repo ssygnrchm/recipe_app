@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
-import 'package:food_delivery_app/data/recipe_model.dart';
-import 'package:food_delivery_app/domain/database_helper.dart';
+import 'package:food_delivery_app/database/data/recipe_model.dart';
+import 'package:food_delivery_app/database/domain/database_helper.dart';
 
 class RecipeScreen extends StatefulWidget {
   final Recipe? existingRecipe; // Modified to use Recipe model instead of Map

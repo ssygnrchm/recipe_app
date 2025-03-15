@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/data/recipe_model.dart';
+import 'package:food_delivery_app/database/data/recipe_model.dart';
 import 'package:food_delivery_app/presentation/pages/recipe_screen.dart';
 
 class RecipeListWidget extends StatelessWidget {

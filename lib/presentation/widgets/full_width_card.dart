@@ -31,7 +31,7 @@ class FullWidthCard extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Image.asset(Assets.chickenImage, height: 147)],
+              children: [Image.asset(image, height: 147, fit: BoxFit.contain)],
             ),
             Container(
               constraints: BoxConstraints(
