@@ -188,43 +188,6 @@ class RecipeCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(
-                  title: title,
-                  style: AppTextStyles.paragraphMediumBold,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                GestureDetector(
-                  onTap: () {
-                    // TODO: Navigate to recipe details
-                    // For now, just show the recipe ID
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Recipe ID: $recipeId')),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: CustomText.bodySmall(context, 'View Details'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           // Recipe image
           Expanded(
             child: Padding(
@@ -265,6 +228,43 @@ class RecipeCard extends StatelessWidget {
                           color: theme.colorScheme.primary,
                         ),
               ),
+            ),
+          ),
+
+          // Title
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  title: title,
+                  style: AppTextStyles.paragraphMediumBold,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () {
+                    // TODO: Navigate to recipe details
+                    // For now, just show the recipe ID
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Recipe ID: $recipeId')),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: CustomText.bodySmall(context, 'View Details'),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -11,3 +11,9 @@ Future<http.Response> fetchRandomRecipeAPI() {
   print('${Endpoint.baseUrl}/random.php');
   return http.get(Uri.parse('${Endpoint.baseUrl}/random.php'));
 }
+
+Future<http.Response> fetchRecipeByIdAPI(String id) {
+  final _id = id;
+  print('${Endpoint.baseUrl}//lookup.php?i=${_id}');
+  return http.get(Uri.parse('${Endpoint.baseUrl}/random.php'));
+}

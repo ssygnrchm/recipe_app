@@ -25,14 +25,18 @@ Future<SingleRecipe> fetchRandomRecipe() async {
   final response = await fetchRandomRecipeAPI();
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return SingleRecipe.fromJson(
-      jsonDecode(response.body) as Map<String, dynamic>,
-    );
+    // Parse the JSON
+    final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+
+    // Extract the first recipe from the "meals" array
+    if (jsonData.containsKey('meals') &&
+        jsonData['meals'] is List &&
+        (jsonData['meals'] as List).isNotEmpty) {
+      return SingleRecipe.fromJson(jsonData['meals'][0]);
+    } else {
+      throw Exception('No recipe found in response');
+    }
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
     throw Exception('Failed to load Random Recipe');
   }
 }
@@ -50,4 +54,9 @@ Future<List<SingleRecipe>> loadRandomRecipes(int count) async {
     }
   }
   return recipes;
+}
+
+Future<SingleRecipe> fetchRecipeById(String id) async {
+  final response = await fetchRecipeByIdAPI(id);
+  // get data from api
 }

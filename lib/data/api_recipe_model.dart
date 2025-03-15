@@ -6,8 +6,8 @@ class SingleRecipe {
   String strArea;
   String strInstructions;
   String strMealThumb;
-  String strTags;
-  String strYoutube;
+  String? strTags;
+  String? strYoutube;
   List<String> ingredients;
   List<String> measures;
   String? strSource;
@@ -23,8 +23,8 @@ class SingleRecipe {
     required this.strArea,
     required this.strInstructions,
     required this.strMealThumb,
-    required this.strTags,
-    required this.strYoutube,
+    this.strTags,
+    this.strYoutube,
     required this.ingredients,
     required this.measures,
     this.strSource,
@@ -49,13 +49,13 @@ class SingleRecipe {
     }
 
     return SingleRecipe(
-      idMeal: json['idMeal'],
-      strMeal: json['strMeal'],
+      idMeal: json['idMeal'] ?? '',
+      strMeal: json['strMeal'] ?? '',
       strMealAlternate: json['strMealAlternate'],
-      strCategory: json['strCategory'],
-      strArea: json['strArea'],
-      strInstructions: json['strInstructions'],
-      strMealThumb: json['strMealThumb'],
+      strCategory: json['strCategory'] ?? '',
+      strArea: json['strArea'] ?? '',
+      strInstructions: json['strInstructions'] ?? '',
+      strMealThumb: json['strMealThumb'] ?? '',
       strTags: json['strTags'],
       strYoutube: json['strYoutube'],
       ingredients: ingredients,
@@ -118,12 +118,12 @@ class SingleRecipe {
 
   // Getter to check if the meal has video source
   bool get hasVideo {
-    return strYoutube.isNotEmpty;
+    return strYoutube != null && strYoutube!.isNotEmpty;
   }
 
   // Getter to get a formatted list of tags
   List<String> get tagsList {
-    return strTags.split(',').map((tag) => tag.trim()).toList();
+    return strTags?.split(',').map((tag) => tag.trim()).toList() ?? [];
   }
 
   // Getter to get the primary ingredient (just the first one in the list)
