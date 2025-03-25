@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/authentication/presentation/pages/login_screen.dart';
 import 'package:food_delivery_app/presentation/pages/home_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_button.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
@@ -49,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 },
               ),

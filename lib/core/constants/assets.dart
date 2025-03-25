@@ -2,6 +2,7 @@
 class Assets {
   // Images
   static const String welcomeImage = 'assets/images/welcome_image.png';
+  static const String loginImage = 'assets/images/login_image.png';
   static const String userIcon = 'assets/images/avatar.png';
   static const String pizzaIcon = 'assets/images/pizza.png';
   static const String saladIcon = 'assets/images/salad.png';
