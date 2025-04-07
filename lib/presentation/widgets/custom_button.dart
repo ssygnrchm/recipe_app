@@ -3,7 +3,7 @@ import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 import 'package:food_delivery_app/core/theme/app_theme.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({
+  CustomButton({
     super.key,
     required this.title,
     this.onPressed,
@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
     this.isSecondary = false,
     this.isDanger = false,
     this.isSuccess = false,
+    this.buttonIcon,
   });
 
   final String title;
@@ -19,6 +20,8 @@ class CustomButton extends StatelessWidget {
   final bool isSecondary;
   final bool isDanger;
   final bool isSuccess;
+  final Widget? buttonIcon;
+  Set<MaterialState> states = <MaterialState>{MaterialState.pressed};
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +46,19 @@ class CustomButton extends StatelessWidget {
             ? Size(MediaQuery.of(context).size.width / 2.5, 56)
             : Size(MediaQuery.of(context).size.width, 56);
 
-    return ElevatedButton(
+    return ElevatedButton.icon(
+      icon: buttonIcon,
       style: getButtonStyle().copyWith(
         // Override the fixed size while keeping all other style properties
         fixedSize: WidgetStateProperty.all(buttonSize),
       ),
       onPressed: onPressed,
-      child: CustomText(
+      label: CustomText(
         title: title,
         fsize: 16,
         fweight: FontWeight.bold,
         // Let the button style determine text color based on the theme
-        fcolor: null,
+        fcolor: getButtonStyle().foregroundColor!.resolve(states),
       ),
     );
   }

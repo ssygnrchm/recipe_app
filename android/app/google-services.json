@@ -7,50 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:350815746161:android:931b9b1df3f21df282c3d0",
-        "android_client_info": {
-          "package_name": "com.alayyubi.foochiapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "350815746161-3kki9aa2671m90o9ojfjpq56vbudie33.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.alayyubi.foochiapp",
-            "certificate_hash": "dd59a8de250f3c58ee4a833aae4768e1907aa0a5"
-          }
-        },
-        {
-          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:350815746161:android:a2e8d60c819f172882c3d0",
         "android_client_info": {
           "package_name": "com.alayyubiproject.chatapp"
@@ -83,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -127,10 +83,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -163,10 +119,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -207,10 +163,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -234,14 +190,6 @@
           }
         },
         {
-          "client_id": "350815746161-m1jsklb60s31biml14kstj7tpvhkfedb.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ppkd.project_firebase",
-            "certificate_hash": "f6195773d661103a7565fc6aab95e73817000711"
-          }
-        },
-        {
           "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -259,10 +207,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -303,10 +251,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -355,10 +303,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -399,10 +347,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]
@@ -443,10 +391,10 @@
               "client_type": 3
             },
             {
-              "client_id": "350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com",
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.foodDeliveryApp"
+                "bundle_id": "com.example.absenGeura"
               }
             }
           ]

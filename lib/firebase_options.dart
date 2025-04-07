@@ -64,8 +64,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '350815746161',
     projectId: 'ppkd-mp',
     storageBucket: 'ppkd-mp.firebasestorage.app',
-    androidClientId: '350815746161-3kki9aa2671m90o9ojfjpq56vbudie33.apps.googleusercontent.com',
-    iosClientId: '350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com',
+    androidClientId:
+        '350815746161-5vd6voli5gfgn5duonvsfk3in9mqh7vv.apps.googleusercontent.com',
+    iosClientId:
+        '350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com',
     iosBundleId: 'com.example.foodDeliveryApp',
   );
 
@@ -75,8 +77,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '350815746161',
     projectId: 'ppkd-mp',
     storageBucket: 'ppkd-mp.firebasestorage.app',
-    androidClientId: '350815746161-3kki9aa2671m90o9ojfjpq56vbudie33.apps.googleusercontent.com',
-    iosClientId: '350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com',
+    androidClientId:
+        '350815746161-5vd6voli5gfgn5duonvsfk3in9mqh7vv.apps.googleusercontent.com',
+    iosClientId:
+        '350815746161-9dkv2dinliv448vfgas9dhlql48hbuja.apps.googleusercontent.com',
     iosBundleId: 'com.example.foodDeliveryApp',
   );
 
