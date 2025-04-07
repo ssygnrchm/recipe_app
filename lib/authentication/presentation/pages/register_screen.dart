@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/authentication/presentation/pages/login_screen.dart';
+import 'package:food_delivery_app/authentication/service/firebase_auth_service.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/presentation/pages/home_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_button.dart';
@@ -8,17 +10,26 @@ class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
 
+  final TextEditingController _passwordConfirmationController =
+      TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
+  final FirebaseAuthService _authService = FirebaseAuthService();
+
   bool _isObsecure = true;
+  // Loading state
+  bool _isLoading = false;
+  // Error message
+  String? _errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -80,34 +91,39 @@ class _LoginScreenState extends State<RegisterScreen> {
                       CustomText(title: "Comfirm Password"),
                       loginTextField(
                         "Enter your password",
-                        controller: _passwordController,
+                        controller: _passwordConfirmationController,
                         isPassword: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Password is required";
                           }
-                          if (value.length < 6) {
-                            return "Password must be at least 6 characters";
+                          if (value != _passwordController.text) {
+                            return "Password tidak sama!";
                           }
                           return null;
                         },
                       ),
-                      GestureDetector(
-                        onTap: () => _forgotPassword(),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: CustomText(
-                            title: "Forgot Password?",
-                            fcolor: theme.colorScheme.primary,
+                      // Display error message if any
+                      if (_errorMessage != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            _errorMessage!,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                      ],
                       Row(
                         children: [
                           Expanded(
                             child: CustomButton(
-                              title: "Login",
-                              onPressed: () {},
+                              title: "Register",
+                              onPressed: !_isLoading ? _register : null,
                             ),
                           ),
                         ],
@@ -125,7 +141,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                                 height: 24,
                               ),
                               title: "Google",
-                              onPressed: () {},
+                              onPressed: _googleLogin,
                               isSecondary: true,
                             ),
                           ),
@@ -141,7 +157,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
+                                  builder: (context) => LoginScreen(),
                                 ),
                               );
                             },
@@ -201,25 +217,55 @@ class _LoginScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _forgotPassword() async {
-    final email = _emailController.text.trim();
-    if (email.isEmpty) {
+  void _register() async {
+    if (_formKey.currentState!.validate()) {
       setState(() {
-        // _errorMessage = "Please enter your email to reset password";
+        _isLoading = true;
+        _errorMessage = null;
       });
-      return;
-    }
 
-    try {
-      // await _authService.sendPasswordResetEmail(email);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Password reset email sent to $email')),
+      try {
+        final user = await _authService.registerWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
         );
+
+        if (user != null) {
+          // Navigate to home screen
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          }
+        }
+      } catch (e) {
+        setState(() {
+          _errorMessage = e.toString();
+        });
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  void _googleLogin() async {
+    try {
+      final user = await _authService.signInwithGoogle();
+      if (user != null) {
+        // Navigate to home screen
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
       }
     } catch (e) {
       setState(() {
-        // _errorMessage = e.toString();
+        _errorMessage = e.toString();
       });
     }
   }

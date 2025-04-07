@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/authentication/presentation/pages/register_screen.dart';
+import 'package:food_delivery_app/authentication/service/firebase_auth_service.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/presentation/pages/home_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_button.dart';
@@ -19,9 +20,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  // final FirebaseAuthService _authService = FirebaseAuthService();
+  final FirebaseAuthService _authService = FirebaseAuthService();
 
   bool _isObsecure = true;
+
+  bool _isLoading = false;
+
+  String? _errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +96,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
+                      if (_errorMessage != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            _errorMessage!,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
                       Row(
                         children: [
                           Expanded(
                             child: CustomButton(
                               title: "Login",
-                              onPressed: () {},
+                              onPressed: !_isLoading ? _login : null,
                             ),
                           ),
                         ],
@@ -114,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 24,
                               ),
                               title: "Google",
-                              onPressed: () {},
+                              onPressed: _googleLogin,
                               isSecondary: true,
                             ),
                           ),
@@ -194,13 +212,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     if (email.isEmpty) {
       setState(() {
-        // _errorMessage = "Please enter your email to reset password";
+        _errorMessage = "Please enter your email to reset password";
       });
       return;
     }
 
     try {
-      // await _authService.sendPasswordResetEmail(email);
+      await _authService.sendPasswordResetEmail(email);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Password reset email sent to $email')),
@@ -208,44 +226,59 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       setState(() {
-        // _errorMessage = e.toString();
+        _errorMessage = e.toString();
       });
     }
   }
 
-  // void _login() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //     try {
-  //       final user = await _authService.signInWithEmailAndPassword(
-  //         email: _emailController.text.trim(),
-  //         password: _passwordController.text,
-  //       );
+  void _googleLogin() async {
+    try {
+      final user = await _authService.signInwithGoogle();
+      if (user != null) {
+        // Navigate to home screen
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    }
+  }
 
-  //       if (user != null) {
-  //         // Navigate to home screen
-  //         if (mounted) {
-  //           Navigator.pushReplacement(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder:
-  //                   (context) =>
-  //                       HomeScreen(),
-  //             ),
-  //           );
-  //         }
-  //       }
-  //     } catch (e) {
-  //       setState(() {
-  //         _errorMessage = e.toString();
-  //       });
-  //     } finally {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //     }
-  //   }
-  // }
+  void _login() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        final user = await _authService.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+
+        if (user != null) {
+          // Navigate to home screen
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          }
+        }
+      } catch (e) {
+        setState(() {
+          _errorMessage = e.toString();
+        });
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 }
