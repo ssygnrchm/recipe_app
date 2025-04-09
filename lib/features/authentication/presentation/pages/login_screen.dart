@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/features/authentication/presentation/pages/register_screen.dart';
+import 'package:food_delivery_app/features/authentication/provider/auth_provider.dart';
 import 'package:food_delivery_app/features/authentication/service/firebase_auth_service.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/presentation/pages/home_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_button.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -231,44 +233,23 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _googleLogin() async {
-    try {
-      final user = await _authService.signInwithGoogle();
-      if (user != null) {
-        // Navigate to home screen
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
-        }
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-      });
-    }
-  }
-
   void _login() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
       try {
-        final user = await _authService.signInWithEmailAndPassword(
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        final success = await authProvider.signIn(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
 
-        if (user != null) {
-          // Navigate to home screen
-          if (mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
-          }
+        if (success && mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
         }
       } catch (e) {
         setState(() {
@@ -279,6 +260,31 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  void _googleLogin() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final success = await authProvider.signInWithGoogle();
+
+      if (success && mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

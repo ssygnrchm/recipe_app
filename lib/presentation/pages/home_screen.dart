@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/features/authentication/provider/auth_provider.dart';
 import 'package:food_delivery_app/features/authentication/service/firebase_auth_service.dart';
 import 'package:food_delivery_app/features/authentication/presentation/pages/login_screen.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
@@ -10,6 +11,7 @@ import 'package:food_delivery_app/presentation/pages/recipe_list_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/category_card.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 import 'package:food_delivery_app/presentation/widgets/random_recipe_card.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuthService _authService = FirebaseAuthService();
 
   void _showProfileDialog() {
-    final currentUserEmail = _authService.currentUser?.email ?? 'User';
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final currentUserEmail = authProvider.user?.email ?? 'User';
 
     showDialog(
       context: context,
@@ -47,8 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () async {
                       // Close the dialog
                       Navigator.of(context).pop();
-                      // Perform logout
-                      await _authService.signOut();
+                      // Perform logout using provider
+                      await authProvider.signOut();
                       // Navigate to login screen
                       if (mounted) {
                         Navigator.of(context).pushAndRemoveUntil(
@@ -196,6 +199,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 24),
 
+                // My Recipe Section
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText.h2(context, "My recipe"),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecipeListScreen(),
+                              ),
+                            );
+                          },
+                          icon: Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
                 // Popular Categories Section
                 CustomText.h1(context, "All Categories"),
 
@@ -294,27 +323,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
                   ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Featured Recipe Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText.h1(context, "My recipe"),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RecipeListScreen(),
-                          ),
-                        );
-                      },
-                      icon: Icon(Icons.arrow_forward),
-                    ),
-                  ],
                 ),
 
                 const SizedBox(height: 64),
