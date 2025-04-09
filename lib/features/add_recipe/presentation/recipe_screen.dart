@@ -419,12 +419,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-
-            // Category selection section
-            Text('Recipe Category', style: theme.textTheme.titleLarge),
             const SizedBox(height: 16),
 
+            // Category selection section
             // Category dropdown
             DropdownButtonFormField<String>(
               value: _selectedCategory,
@@ -463,12 +460,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
               },
             ),
 
-            const SizedBox(height: 24),
-
-            // Area/Country input
-            Text('Area/Country', style: theme.textTheme.titleLarge),
             const SizedBox(height: 16),
 
+            // Area/Country input
             TextFormField(
               controller: _areaController,
               decoration: const InputDecoration(
