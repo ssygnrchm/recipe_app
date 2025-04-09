@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/database/data/firestore_recipe_model.dart';
 import 'package:food_delivery_app/database/data/recipe_model.dart';
-import 'package:food_delivery_app/features/add%20recipe/presentation/recipe_screen.dart';
+import 'package:food_delivery_app/features/add_recipe/presentation/recipe_screen.dart';
 
 class RecipeListWidget extends StatelessWidget {
-  final List<Recipe> recipes;
+  final List<FirestoreRecipe> recipes;
   final Axis scrollDirection;
   final Function(Recipe? recipe)? onEdit;
   final Function(Recipe recipe)? onDelete;

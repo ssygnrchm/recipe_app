@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/database/data/firestore_recipe_model.dart';
 import 'package:food_delivery_app/database/data/recipe_model.dart';
 import 'package:food_delivery_app/database/domain/recipe_repository.dart';
-import 'package:food_delivery_app/features/add%20recipe/presentation/recipe_screen.dart';
+import 'package:food_delivery_app/features/add_recipe/presentation/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/recipe_list_widget.dart';
 
 class RecipesListScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _RecipesListScreenState extends State<RecipesListScreen> {
     }
   }
 
-  Future<void> _createOrEditRecipe(Recipe? recipe) async {
+  Future<void> _createOrEditRecipe(FirestoreRecipe? recipe) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(

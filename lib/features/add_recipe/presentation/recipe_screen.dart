@@ -1,14 +1,15 @@
+// lib/features/add recipe/presentation/recipe_screen.dart
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
-import 'package:food_delivery_app/database/data/recipe_model.dart';
-import 'package:food_delivery_app/database/domain/database_helper.dart';
-import 'package:image_picker/image_picker.dart'; // Add this import
-import 'dart:io'; // Add this import for File
+import 'package:food_delivery_app/database/data/firestore_recipe_model.dart';
+import 'package:food_delivery_app/database/domain/firestore_recipe_repository.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class RecipeScreen extends StatefulWidget {
-  final Recipe? existingRecipe;
+  final FirestoreRecipe? existingRecipe;
 
   const RecipeScreen({super.key, this.existingRecipe});
 
@@ -22,6 +23,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
   final _descriptionController = TextEditingController();
   final _cookTimeController = TextEditingController();
   final _servingsController = TextEditingController();
+  final FirestoreRecipeRepository _recipeRepository =
+      FirestoreRecipeRepository();
 
   List<Map<String, dynamic>> _ingredients = [];
   bool _isSaving = false;
@@ -73,7 +76,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
               !_defaultImages.contains(_existingImagePath));
       if (!_useDefaultImage) {
         // If has custom image path
-        // In a real app, you might need to handle loading from local storage
+        // In a real app, you might need to handle loading from network URL
       } else if (_existingImagePath != null) {
         // If using a default image
         _selectedDefaultImageIndex =
@@ -200,51 +203,63 @@ class _RecipeScreenState extends State<RecipeScreen> {
           // Use default image
           imagePath = _defaultImages[_selectedDefaultImageIndex];
         } else if (_imageFile != null) {
-          // Handle custom image storage
-          // In a real app, you would:
-          // 1. Generate a unique filename
-          // 2. Copy the image to app storage
-          // 3. Save the path to the database
-
-          // For now, we'll just use the temporary path
+          // For Firebase, we'll upload this later, so just keep track of the file
+          // and temporarily set the path to the local path
           imagePath = _imageFile!.path;
-
-          // In a production app, implement proper storage:
-          // final appDir = await getApplicationDocumentsDirectory();
-          // final fileName = path.basename(_imageFile!.path);
-          // final savedImage = await _imageFile!.copy('${appDir.path}/$fileName');
-          // imagePath = savedImage.path;
         } else if (_existingImagePath != null &&
             !_defaultImages.contains(_existingImagePath)) {
-          // Keep existing custom image
+          // Keep existing custom image URL (from Firestore)
           imagePath = _existingImagePath!;
         } else {
           // Fallback to first default image
           imagePath = _defaultImages[0];
         }
 
+        // Create ingredients list
+        final ingredientsList =
+            _ingredients
+                .map(
+                  (item) => FirestoreIngredient(
+                    name: item['name'],
+                    amount: item['amount'],
+                    unit: item['unit'],
+                  ),
+                )
+                .toList();
+
         // Create recipe object
-        final recipeData = {
-          'name': _nameController.text,
-          'description': _descriptionController.text,
-          'cookTime': int.tryParse(_cookTimeController.text) ?? 0,
-          'servings': int.tryParse(_servingsController.text) ?? 1,
-          'ingredients': _ingredients,
-          'imageIndex':
+        final recipe = FirestoreRecipe(
+          id: widget.existingRecipe?.id,
+          name: _nameController.text,
+          description: _descriptionController.text,
+          cookTime: int.tryParse(_cookTimeController.text),
+          servings: int.tryParse(_servingsController.text),
+          imageIndex:
               _useDefaultImage
                   ? _selectedDefaultImageIndex
                   : -1, // -1 indicates custom image
-          'imagePath': imagePath,
-        };
+          imagePath:
+              _useDefaultImage
+                  ? imagePath
+                  : null, // We'll set this after upload for custom images
+          ingredients: ingredientsList,
+        );
 
-        final dbHelper = DatabaseHelper.instance;
-
+        // Check if we're updating or creating
         if (widget.existingRecipe != null) {
           // Update existing recipe
-          await dbHelper.updateRecipe(widget.existingRecipe!.id!, recipeData);
+          await _recipeRepository.updateRecipe(
+            recipe,
+            imageFile:
+                (!_useDefaultImage && _imageFile != null) ? _imageFile : null,
+          );
         } else {
           // Insert new recipe
-          await dbHelper.insertRecipe(recipeData);
+          await _recipeRepository.saveRecipe(
+            recipe,
+            imageFile:
+                (!_useDefaultImage && _imageFile != null) ? _imageFile : null,
+          );
         }
 
         if (mounted) {
@@ -342,7 +357,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Recipe image selection section - MODIFIED
+            // Recipe image selection section
             Text('Recipe Image', style: theme.textTheme.titleLarge),
             const SizedBox(height: 16),
 
@@ -505,10 +520,22 @@ class _RecipeScreenState extends State<RecipeScreen> {
       );
     } else if (_existingImagePath != null &&
         !_defaultImages.contains(_existingImagePath)) {
-      // Show existing custom image
-      return Image.file(
-        File(_existingImagePath!),
+      // Show existing custom image from network
+      return Image.network(
+        _existingImagePath!,
         fit: BoxFit.contain,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(
+              value:
+                  loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+            ),
+          );
+        },
         errorBuilder:
             (context, error, stackTrace) => _buildErrorPlaceholder(theme),
       );

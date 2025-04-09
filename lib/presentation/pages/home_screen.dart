@@ -5,7 +5,7 @@ import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/api/data/model/api_recipe_model.dart';
 import 'package:food_delivery_app/api/repo/service_recipe.dart';
 import 'package:food_delivery_app/presentation/pages/food_category_screen.dart';
-import 'package:food_delivery_app/features/add%20recipe/presentation/recipe_screen.dart';
+import 'package:food_delivery_app/features/add_recipe/presentation/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/category_card.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 import 'package:food_delivery_app/presentation/widgets/random_recipe_card.dart';
