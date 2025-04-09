@@ -6,6 +6,7 @@ import 'package:food_delivery_app/api/data/model/api_recipe_model.dart';
 import 'package:food_delivery_app/api/repo/service_recipe.dart';
 import 'package:food_delivery_app/presentation/pages/food_category_screen.dart';
 import 'package:food_delivery_app/features/add_recipe/presentation/recipe_screen.dart';
+import 'package:food_delivery_app/presentation/pages/recipe_list_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/category_card.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 import 'package:food_delivery_app/presentation/widgets/random_recipe_card.dart';
@@ -294,6 +295,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
+
+                const SizedBox(height: 24),
+
+                // Featured Recipe Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomText.h1(context, "My recipe"),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeListScreen(),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.arrow_forward),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 64),
               ],
             ),
           ),

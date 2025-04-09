@@ -12,7 +12,9 @@ class FirestoreRecipeRepository {
   final CollectionReference _recipesCollection;
 
   FirestoreRecipeRepository()
-    : _recipesCollection = FirebaseFirestore.instance.collection('recipes');
+    : _recipesCollection = FirebaseFirestore.instance.collection(
+        'madebysisy_recipes',
+      );
 
   // Get all recipes
   Stream<List<FirestoreRecipe>> getAllRecipes() {

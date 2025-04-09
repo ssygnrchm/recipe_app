@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/database/data/firestore_recipe_model.dart';
-import 'package:food_delivery_app/database/data/recipe_model.dart';
 import 'package:food_delivery_app/features/add_recipe/presentation/recipe_screen.dart';
 
 class RecipeListWidget extends StatelessWidget {
   final List<FirestoreRecipe> recipes;
   final Axis scrollDirection;
-  final Function(Recipe? recipe)? onEdit;
-  final Function(Recipe recipe)? onDelete;
+  final Function(FirestoreRecipe recipe)? onEdit;
+  final Function(FirestoreRecipe recipe)? onDelete;
   final bool showActions;
 
   const RecipeListWidget({
@@ -45,7 +44,7 @@ class RecipeListWidget extends StatelessWidget {
         );
   }
 
-  Widget _buildRecipeCard(BuildContext context, Recipe recipe) {
+  Widget _buildRecipeCard(BuildContext context, FirestoreRecipe recipe) {
     return Card(
       margin:
           scrollDirection == Axis.vertical
@@ -56,13 +55,7 @@ class RecipeListWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Recipe image
-          if (recipe.imagePath != null)
-            Image.asset(
-              recipe.imagePath!,
-              height: 150,
-              width: double.infinity,
-              fit: BoxFit.contain,
-            ),
+          _buildRecipeImage(recipe, context),
 
           Padding(
             padding: const EdgeInsets.all(16),
@@ -115,7 +108,7 @@ class RecipeListWidget extends StatelessWidget {
                           icon: const Icon(Icons.edit_outlined),
                           label: const Text('EDIT'),
                         ),
-                      if (onDelete != null)
+                      if (onDelete != null && recipe.id != null)
                         TextButton.icon(
                           onPressed: () => onDelete!(recipe),
                           icon: const Icon(
@@ -134,6 +127,69 @@ class RecipeListWidget extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildRecipeImage(FirestoreRecipe recipe, BuildContext context) {
+    // Check if the recipe has a valid image path
+    if (recipe.imagePath != null) {
+      // Check if it's a default image (from assets) or a custom image (from network)
+      if (recipe.imageIndex >= 0) {
+        // Default/asset image
+        return Image.asset(
+          recipe.imagePath!,
+          height: 150,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder:
+              (context, error, stackTrace) => _buildErrorPlaceholder(context),
+        );
+      } else {
+        // Network image (custom image from Firestore)
+        return Image.network(
+          recipe.imagePath!,
+          height: 150,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              height: 150,
+              width: double.infinity,
+              color: Theme.of(context).colorScheme.surfaceVariant,
+              child: Center(
+                child: CircularProgressIndicator(
+                  value:
+                      loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                ),
+              ),
+            );
+          },
+          errorBuilder:
+              (context, error, stackTrace) => _buildErrorPlaceholder(context),
+        );
+      }
+    } else {
+      // No image, show placeholder
+      return _buildErrorPlaceholder(context);
+    }
+  }
+
+  Widget _buildErrorPlaceholder(BuildContext context) {
+    return Container(
+      height: 150,
+      width: double.infinity,
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      child: Center(
+        child: Icon(
+          Icons.image_not_supported_outlined,
+          size: 48,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

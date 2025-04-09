@@ -1,50 +1,122 @@
+// lib/features/recipes/presentation/recipe_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/database/data/firestore_recipe_model.dart';
-import 'package:food_delivery_app/database/data/recipe_model.dart';
-import 'package:food_delivery_app/database/domain/recipe_repository.dart';
+import 'package:food_delivery_app/database/domain/firestore_recipe_repository.dart';
 import 'package:food_delivery_app/features/add_recipe/presentation/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/recipe_list_widget.dart';
 
-class RecipesListScreen extends StatefulWidget {
-  const RecipesListScreen({super.key});
+class RecipeListScreen extends StatefulWidget {
+  const RecipeListScreen({super.key});
 
   @override
-  State<RecipesListScreen> createState() => _RecipesListScreenState();
+  State<RecipeListScreen> createState() => _RecipeListScreenState();
 }
 
-class _RecipesListScreenState extends State<RecipesListScreen> {
-  final _recipeRepository = RecipeRepository();
-  List<Recipe> _recipes = [];
-  bool _isLoading = true;
+class _RecipeListScreenState extends State<RecipeListScreen> {
+  final FirestoreRecipeRepository _recipeRepository =
+      FirestoreRecipeRepository();
+  bool _isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-    _loadRecipes();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Recipes'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _navigateToAddRecipe,
+            tooltip: 'Add Recipe',
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<List<FirestoreRecipe>>(
+              stream: _recipeRepository.getAllRecipes(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    !snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      'Error loading recipes: ${snapshot.error}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  );
+                }
+
+                final recipes = snapshot.data ?? [];
+                if (recipes.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.restaurant_menu,
+                          size: 80,
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No recipes yet',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Add your first recipe by tapping the + button',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: _navigateToAddRecipe,
+                          icon: const Icon(Icons.add),
+                          label: const Text('Add Recipe'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return RecipeListWidget(
+                  recipes: recipes,
+                  onEdit: _navigateToEditRecipe,
+                  onDelete: _showDeleteConfirmation,
+                );
+              },
+            ),
+          ),
+          if (_isLoading)
+            Container(
+              height: 4,
+              width: double.infinity,
+              child: const LinearProgressIndicator(),
+            ),
+        ],
+      ),
+    );
   }
 
-  Future<void> _loadRecipes() async {
-    setState(() {
-      _isLoading = true;
-    });
+  Future<void> _navigateToAddRecipe() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RecipeScreen()),
+    );
 
-    try {
-      final recipes = await _recipeRepository.getAllRecipes();
-      setState(() {
-        _recipes = recipes;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error loading recipes: $e')));
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    if (result == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Recipe added successfully')),
+      );
     }
   }
 
-  Future<void> _createOrEditRecipe(FirestoreRecipe? recipe) async {
+  Future<void> _navigateToEditRecipe(FirestoreRecipe recipe) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -53,78 +125,82 @@ class _RecipesListScreenState extends State<RecipesListScreen> {
     );
 
     if (result == true) {
-      _loadRecipes();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Recipe updated successfully')),
+      );
     }
   }
 
-  Future<void> _deleteRecipe(Recipe recipe) async {
-    final confirmed = await showDialog<bool>(
+  Future<void> _showDeleteConfirmation(FirestoreRecipe recipe) async {
+    return showDialog<void>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Delete Recipe'),
-            content: Text('Are you sure you want to delete "${recipe.name}"?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('CANCEL'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('DELETE'),
-              ),
-            ],
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Recipe'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to delete "${recipe.name}"?'),
+                const SizedBox(height: 8),
+                const Text('This action cannot be undone.'),
+              ],
+            ),
           ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('DELETE'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteRecipe(recipe);
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error,
+              ),
+            ),
+          ],
+        );
+      },
     );
+  }
 
-    if (confirmed == true && recipe.id != null) {
-      try {
-        await _recipeRepository.deleteRecipe(recipe.id!);
-        _loadRecipes();
-      } catch (e) {
+  Future<void> _deleteRecipe(FirestoreRecipe recipe) async {
+    if (recipe.id == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Error: Recipe has no ID')));
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _recipeRepository.deleteRecipe(recipe.id!);
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Recipe deleted')));
+      }
+    } catch (e) {
+      if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Error deleting recipe: $e')));
       }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Recipes')),
-      body:
-          _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : _recipes.isEmpty
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.restaurant, size: 64, color: Colors.grey),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'No recipes yet',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 8),
-                    ElevatedButton.icon(
-                      onPressed: () => _createOrEditRecipe(null),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Create Recipe'),
-                    ),
-                  ],
-                ),
-              )
-              : RecipeListWidget(
-                recipes: _recipes,
-                onEdit: _createOrEditRecipe,
-                onDelete: _deleteRecipe,
-              ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _createOrEditRecipe(null),
-        child: const Icon(Icons.add),
-      ),
-    );
   }
 }
