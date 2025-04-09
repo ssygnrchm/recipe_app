@@ -1,5 +1,6 @@
 // lib/database/domain/firestore_recipe_repository.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_delivery_app/database/data/firestore_recipe_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
@@ -17,15 +18,19 @@ class FirestoreRecipeRepository {
       );
 
   // Get all recipes
-  Stream<List<FirestoreRecipe>> getAllRecipes() {
-    return _recipesCollection
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs
-              .map((doc) => FirestoreRecipe.fromFirestore(doc))
-              .toList();
-        });
+  Stream<List<FirestoreRecipe>> getAllRecipes({String? userId}) {
+    var query = _recipesCollection.orderBy('createdAt', descending: true);
+
+    // Add userId filter if provided
+    if (userId != null && userId.isNotEmpty) {
+      query = query.where('userId', isEqualTo: userId);
+    }
+
+    return query.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => FirestoreRecipe.fromFirestore(doc))
+          .toList();
+    });
   }
 
   // Get recipe by id
@@ -54,6 +59,7 @@ class FirestoreRecipeRepository {
       imageIndex: recipe.imageIndex,
       imagePath: imagePath,
       ingredients: recipe.ingredients,
+      userId: recipe.userId,
     );
 
     // Add to Firestore
@@ -82,6 +88,7 @@ class FirestoreRecipeRepository {
       imageIndex: recipe.imageIndex,
       imagePath: imagePath,
       ingredients: recipe.ingredients,
+      userId: recipe.userId,
     );
 
     // Update in Firestore

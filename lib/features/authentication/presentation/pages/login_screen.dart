@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 16,
               children: [
-                Row(children: [Image.asset(Assets.loginImage)]),
+                Image.asset(Assets.loginImage),
                 CustomText(
                   title: "Welcome Back!",
                   // fsize: theme.textTheme.displayMedium!.fontSize,

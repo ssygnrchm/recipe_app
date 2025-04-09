@@ -1,4 +1,5 @@
 // lib/features/add recipe/presentation/recipe_screen.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/core/constants/colors.dart';
@@ -25,6 +26,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
   final _servingsController = TextEditingController();
   final FirestoreRecipeRepository _recipeRepository =
       FirestoreRecipeRepository();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<Map<String, dynamic>> _ingredients = [];
   bool _isSaving = false;
@@ -197,6 +199,11 @@ class _RecipeScreenState extends State<RecipeScreen> {
       });
 
       try {
+        final userId = _auth.currentUser?.uid ?? '';
+        if (userId.isEmpty) {
+          throw Exception('User not authenticated');
+        }
+
         // Handle image path
         String imagePath;
         if (_useDefaultImage) {
@@ -243,6 +250,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   ? imagePath
                   : null, // We'll set this after upload for custom images
           ingredients: ingredientsList,
+          userId: userId,
         );
 
         // Check if we're updating or creating

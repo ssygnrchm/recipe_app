@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 16,
               children: [
-                Row(children: [Image.asset(Assets.registerImage)]),
+                Image.asset(Assets.registerImage),
                 CustomText(
                   title: "Let's get you in!",
                   style: theme.textTheme.displayMedium,

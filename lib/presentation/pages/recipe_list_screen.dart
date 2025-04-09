@@ -1,4 +1,5 @@
 // lib/features/recipes/presentation/recipe_list_screen.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/database/data/firestore_recipe_model.dart';
 import 'package:food_delivery_app/database/domain/firestore_recipe_repository.dart';
@@ -15,10 +16,14 @@ class RecipeListScreen extends StatefulWidget {
 class _RecipeListScreenState extends State<RecipeListScreen> {
   final FirestoreRecipeRepository _recipeRepository =
       FirestoreRecipeRepository();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    // Get current userId
+    final userId = _auth.currentUser?.uid;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Recipes'),
@@ -34,7 +39,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
         children: [
           Expanded(
             child: StreamBuilder<List<FirestoreRecipe>>(
-              stream: _recipeRepository.getAllRecipes(),
+              stream: _recipeRepository.getAllRecipes(userId: userId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting &&
                     !snapshot.hasData) {

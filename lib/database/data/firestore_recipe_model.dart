@@ -11,6 +11,7 @@ class FirestoreRecipe {
   final String? imagePath;
   final List<FirestoreIngredient> ingredients;
   final Timestamp createdAt;
+  final String userId; // Added userId field
 
   FirestoreRecipe({
     this.id,
@@ -21,10 +22,11 @@ class FirestoreRecipe {
     required this.imageIndex,
     this.imagePath,
     required this.ingredients,
+    required this.userId, // Make userId required
     Timestamp? createdAt,
   }) : this.createdAt = createdAt ?? Timestamp.now();
 
-  // Convert to a Map for Firestore
+  // Update toMap to include userId
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -35,10 +37,11 @@ class FirestoreRecipe {
       'imagePath': imagePath,
       'ingredients': ingredients.map((i) => i.toMap()).toList(),
       'createdAt': createdAt,
+      'userId': userId, // Include userId in the map
     };
   }
 
-  // Create a Recipe from a Firestore document
+  // Update fromFirestore to extract userId
   factory FirestoreRecipe.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -63,6 +66,7 @@ class FirestoreRecipe {
       imageIndex: data['imageIndex'] ?? 0,
       imagePath: data['imagePath'],
       ingredients: ingredientsList,
+      userId: data['userId'] ?? '', // Extract userId with empty string fallback
       createdAt: data['createdAt'] as Timestamp,
     );
   }
