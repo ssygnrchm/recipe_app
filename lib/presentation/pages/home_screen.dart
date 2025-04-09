@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/authentication/service/firebase_auth_service.dart';
+import 'package:food_delivery_app/authentication/presentation/pages/login_screen.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/api/data/model/api_recipe_model.dart';
 import 'package:food_delivery_app/api/repo/service_recipe.dart';
@@ -6,11 +8,66 @@ import 'package:food_delivery_app/presentation/pages/food_category_screen.dart';
 import 'package:food_delivery_app/presentation/pages/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/category_card.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
-// import 'package:food_delivery_app/presentation/widgets/full_width_card.dart';
 import 'package:food_delivery_app/presentation/widgets/random_recipe_card.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // final FirebaseAuthService _authService = FirebaseAuthService();
+
+  // void _showProfileDialog() {
+  //   final currentUserEmail = _authService.currentUser?.email ?? 'User';
+
+  //   showDialog(
+  //     context: context,
+  //     builder:
+  //         (context) => AlertDialog(
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(16),
+  //           ),
+  //           content: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               const CircleAvatar(
+  //                 radius: 40,
+  //                 backgroundImage: AssetImage(Assets.userIcon),
+  //               ),
+  //               const SizedBox(height: 16),
+  //               CustomText(title: currentUserEmail, fweight: FontWeight.w500),
+  //               const SizedBox(height: 24),
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 child: ElevatedButton.icon(
+  //                   onPressed: () async {
+  //                     // Close the dialog
+  //                     Navigator.of(context).pop();
+  //                     // Perform logout
+  //                     _signOut();
+
+  //                     Navigator.pushReplacement(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => LoginScreen()),
+  //                     );
+  //                   },
+  //                   icon: const Icon(Icons.logout),
+  //                   label: const Text('Sign Out'),
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: Colors.red,
+  //                     foregroundColor: Colors.white,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //   );
+  // }
 
   List<Widget> _buildCategoryList(BuildContext context) {
     final List<Map<String, dynamic>> categories = [
@@ -113,9 +170,14 @@ class HomeScreen extends StatelessWidget {
                 // Top Search Bar with Avatar
                 Row(
                   children: [
-                    const CircleAvatar(
-                      maxRadius: 16,
-                      backgroundImage: AssetImage("assets/images/avatar.png"),
+                    GestureDetector(
+                      onTap: () {
+                        // _showProfileDialog;
+                      },
+                      child: const CircleAvatar(
+                        maxRadius: 16,
+                        backgroundImage: AssetImage(Assets.userIcon),
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -200,7 +262,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: 180,
                   child: FutureBuilder<List<SingleRecipe>>(
-                    future: loadRandomRecipes(1), // Load 5 random recipes
+                    future: loadRandomRecipes(1), // Load 1 random recipe
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -231,21 +293,6 @@ class HomeScreen extends StatelessWidget {
                     },
                   ),
                 ),
-
-                //unchanged
-                // FullWidthCard(
-                //   image: Assets.tacosImage,
-                //   title: "Taco Bell",
-                //   subtitle: "mexican",
-                // ),
-
-                // const SizedBox(height: 16),
-
-                // FullWidthCard(
-                //   image: Assets.chickenImage,
-                //   title: "Five guys",
-                //   subtitle: "Turkish",
-                // ),
               ],
             ),
           ),
@@ -264,4 +311,19 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  // void _signOut() async {
+  //   try {
+  //     final authService = Provider.of<FirebaseAuthService>(
+  //       context,
+  //       listen: false,
+  //     );
+  //     await authService.signOut();
+  //     // No need to navigate, the AuthWrapper will handle this
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error signing out: ${e.toString()}')),
+  //     );
+  //   }
+  // }
 }

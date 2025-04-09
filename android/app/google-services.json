@@ -1,0 +1,406 @@
+{
+  "project_info": {
+    "project_number": "350815746161",
+    "project_id": "ppkd-mp",
+    "storage_bucket": "ppkd-mp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:a2e8d60c819f172882c3d0",
+        "android_client_info": {
+          "package_name": "com.alayyubiproject.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-kk79rvr1f5er3i7ou4mvsfh277mhhonu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alayyubiproject.chatapp",
+            "certificate_hash": "4a2eff80987d900af6f9fe75d3fed6f808072cb9"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:244eb2989526b3f982c3d0",
+        "android_client_info": {
+          "package_name": "com.company.ApisAppp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-gjlqh0gkj65sp2k096ff77squqvj8ejt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.company.ApisAppp",
+            "certificate_hash": "5530a44f94740f879a5f6ca72efdfc370b7e1382"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:f417c3d7792e59e482c3d0",
+        "android_client_info": {
+          "package_name": "com.madebysisy.recipeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:2a61b723e8727d3082c3d0",
+        "android_client_info": {
+          "package_name": "com.ppkd.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-g0mvuuqtss22u09bfi4k7cuffbpv34e7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ppkd.mobile",
+            "certificate_hash": "5ba5a0d15317852c492e818a53cedc5dd74ed1c8"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:ad1050d7daca4d8f82c3d0",
+        "android_client_info": {
+          "package_name": "com.ppkd.project_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-hcmtib7vp2d4id2jl3hl24gp38fhnh30.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ppkd.project_firebase",
+            "certificate_hash": "886f5df2bdd79ea674194ff051e7d5b2c1afc920"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:37a8326bfc42fc5682c3d0",
+        "android_client_info": {
+          "package_name": "com.ppkd.secondbase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-5vd6voli5gfgn5duonvsfk3in9mqh7vv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ppkd.secondbase",
+            "certificate_hash": "2535cefbd46dee8cf7ad5dc5436f1d9495879dfd"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:ef975fcacbea245b82c3d0",
+        "android_client_info": {
+          "package_name": "com.ppkd.testingg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-j2mkrbdlnmdftkhspj0o71btq2ap6nkr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ppkd.testingg",
+            "certificate_hash": "bba3a712b67d7a3f12d777544e169cf86a1963e5"
+          }
+        },
+        {
+          "client_id": "350815746161-r135ammjin1357bn8gk9am7dn9uuklpk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ppkd.testingg",
+            "certificate_hash": "30600c168b6f8976c9fe71ec76c7104de1c43b66"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:7131fa4fa87a38b882c3d0",
+        "android_client_info": {
+          "package_name": "com.saliim.absengeuraa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-knkll0ifecaip3e26eem4m2bs92pm600.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.saliim.absengeuraa",
+            "certificate_hash": "1e1b44a5447b225a3ab6538ca5ca35e31d476e4e"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350815746161:android:b46b2ae6bdc78a5182c3d0",
+        "android_client_info": {
+          "package_name": "com.smartresident"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350815746161-hv80dgsvv1k6fnqov1u6b0713v5v5daq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smartresident",
+            "certificate_hash": "e3fb90dcd50174703d1dc3dba401c01cb98845e9"
+          }
+        },
+        {
+          "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350815746161-tkq5eshh702oqsd7n6aheq6451ffh8i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350815746161-c63ehftfqghgcam8dvm43ktk7v8ipv3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.absenGeura"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
