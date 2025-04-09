@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/authentication/service/firebase_auth_service.dart';
-import 'package:food_delivery_app/authentication/presentation/pages/login_screen.dart';
+import 'package:food_delivery_app/features/authentication/service/firebase_auth_service.dart';
+import 'package:food_delivery_app/features/authentication/presentation/pages/login_screen.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/api/data/model/api_recipe_model.dart';
 import 'package:food_delivery_app/api/repo/service_recipe.dart';
 import 'package:food_delivery_app/presentation/pages/food_category_screen.dart';
-import 'package:food_delivery_app/presentation/pages/recipe_screen.dart';
+import 'package:food_delivery_app/features/add%20recipe/presentation/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/category_card.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 import 'package:food_delivery_app/presentation/widgets/random_recipe_card.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,55 +18,59 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final FirebaseAuthService _authService = FirebaseAuthService();
+  final FirebaseAuthService _authService = FirebaseAuthService();
 
-  // void _showProfileDialog() {
-  //   final currentUserEmail = _authService.currentUser?.email ?? 'User';
+  void _showProfileDialog() {
+    final currentUserEmail = _authService.currentUser?.email ?? 'User';
 
-  //   showDialog(
-  //     context: context,
-  //     builder:
-  //         (context) => AlertDialog(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(16),
-  //           ),
-  //           content: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               const CircleAvatar(
-  //                 radius: 40,
-  //                 backgroundImage: AssetImage(Assets.userIcon),
-  //               ),
-  //               const SizedBox(height: 16),
-  //               CustomText(title: currentUserEmail, fweight: FontWeight.w500),
-  //               const SizedBox(height: 24),
-  //               SizedBox(
-  //                 width: double.infinity,
-  //                 child: ElevatedButton.icon(
-  //                   onPressed: () async {
-  //                     // Close the dialog
-  //                     Navigator.of(context).pop();
-  //                     // Perform logout
-  //                     _signOut();
-
-  //                     Navigator.pushReplacement(
-  //                       context,
-  //                       MaterialPageRoute(builder: (context) => LoginScreen()),
-  //                     );
-  //                   },
-  //                   icon: const Icon(Icons.logout),
-  //                   label: const Text('Sign Out'),
-  //                   style: ElevatedButton.styleFrom(
-  //                     backgroundColor: Colors.red,
-  //                     foregroundColor: Colors.white,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //   );
-  // }
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircleAvatar(
+                  radius: 40,
+                  backgroundImage: AssetImage(Assets.userIcon),
+                ),
+                const SizedBox(height: 16),
+                CustomText(title: currentUserEmail, fweight: FontWeight.w500),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                      // Perform logout
+                      await _authService.signOut();
+                      // Navigate to login screen
+                      if (mounted) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.logout),
+                    label: const Text('Sign Out'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+    );
+  }
 
   List<Widget> _buildCategoryList(BuildContext context) {
     final List<Map<String, dynamic>> categories = [
@@ -171,9 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        // _showProfileDialog;
-                      },
+                      onTap: _showProfileDialog,
                       child: const CircleAvatar(
                         maxRadius: 16,
                         backgroundImage: AssetImage(Assets.userIcon),
@@ -311,19 +312,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  // void _signOut() async {
-  //   try {
-  //     final authService = Provider.of<FirebaseAuthService>(
-  //       context,
-  //       listen: false,
-  //     );
-  //     await authService.signOut();
-  //     // No need to navigate, the AuthWrapper will handle this
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Error signing out: ${e.toString()}')),
-  //     );
-  //   }
-  // }
 }

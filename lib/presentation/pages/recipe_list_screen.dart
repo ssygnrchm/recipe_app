@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/database/data/recipe_model.dart';
 import 'package:food_delivery_app/database/domain/recipe_repository.dart';
-import 'package:food_delivery_app/presentation/pages/recipe_screen.dart';
+import 'package:food_delivery_app/features/add%20recipe/presentation/recipe_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/recipe_list_widget.dart';
 
 class RecipesListScreen extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/authentication/presentation/pages/register_screen.dart';
-import 'package:food_delivery_app/authentication/service/firebase_auth_service.dart';
+import 'package:food_delivery_app/features/authentication/presentation/pages/register_screen.dart';
+import 'package:food_delivery_app/features/authentication/service/firebase_auth_service.dart';
 import 'package:food_delivery_app/core/constants/assets.dart';
 import 'package:food_delivery_app/presentation/pages/home_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_button.dart';
@@ -31,9 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(46, 16, 46, 0),
             child: Column(

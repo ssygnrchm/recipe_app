@@ -4,9 +4,11 @@ import 'package:food_delivery_app/core/constants/colors.dart';
 import 'package:food_delivery_app/core/constants/text_styles.dart';
 import 'package:food_delivery_app/database/data/recipe_model.dart';
 import 'package:food_delivery_app/database/domain/database_helper.dart';
+import 'package:image_picker/image_picker.dart'; // Add this import
+import 'dart:io'; // Add this import for File
 
 class RecipeScreen extends StatefulWidget {
-  final Recipe? existingRecipe; // Modified to use Recipe model instead of Map
+  final Recipe? existingRecipe;
 
   const RecipeScreen({super.key, this.existingRecipe});
 
@@ -22,16 +24,22 @@ class _RecipeScreenState extends State<RecipeScreen> {
   final _servingsController = TextEditingController();
 
   List<Map<String, dynamic>> _ingredients = [];
-  int _selectedImageIndex = 0;
   bool _isSaving = false;
 
-  // Sample recipe images (in a real app, these would be loaded from assets or API)
-  final List<String> _recipeImages = [
+  // For image handling
+  File? _imageFile;
+  String? _existingImagePath;
+  final ImagePicker _picker = ImagePicker();
+
+  // Default images as fallback
+  final List<String> _defaultImages = [
     Assets.burgerImage,
     Assets.chickenImage,
     Assets.riceBoxImage,
     Assets.tacosImage,
   ];
+  int _selectedDefaultImageIndex = 0;
+  bool _useDefaultImage = true;
 
   @override
   void initState() {
@@ -58,7 +66,21 @@ class _RecipeScreenState extends State<RecipeScreen> {
               )
               .toList();
 
-      _selectedImageIndex = widget.existingRecipe!.imageIndex;
+      // Handle existing image
+      _existingImagePath = widget.existingRecipe!.imagePath;
+      _useDefaultImage =
+          !(_existingImagePath != null &&
+              !_defaultImages.contains(_existingImagePath));
+      if (!_useDefaultImage) {
+        // If has custom image path
+        // In a real app, you might need to handle loading from local storage
+      } else if (_existingImagePath != null) {
+        // If using a default image
+        _selectedDefaultImageIndex =
+            _defaultImages.indexOf(_existingImagePath!) >= 0
+                ? _defaultImages.indexOf(_existingImagePath!)
+                : 0;
+      }
     } else {
       // Add one empty ingredient for new recipes
       _ingredients.add({'name': '', 'amount': '', 'unit': 'g'});
@@ -94,6 +116,77 @@ class _RecipeScreenState extends State<RecipeScreen> {
     });
   }
 
+  // Image picking functions
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: source,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+          _useDefaultImage = false;
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+    }
+  }
+
+  void _showImageSourceDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Select Image Source'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Take a Photo'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Choose from Gallery'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.gallery);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text('Use Default Images'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      _useDefaultImage = true;
+                      _imageFile = null;
+                    });
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+            ],
+          ),
+    );
+  }
+
   Future<void> _saveRecipe() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -101,6 +194,35 @@ class _RecipeScreenState extends State<RecipeScreen> {
       });
 
       try {
+        // Handle image path
+        String imagePath;
+        if (_useDefaultImage) {
+          // Use default image
+          imagePath = _defaultImages[_selectedDefaultImageIndex];
+        } else if (_imageFile != null) {
+          // Handle custom image storage
+          // In a real app, you would:
+          // 1. Generate a unique filename
+          // 2. Copy the image to app storage
+          // 3. Save the path to the database
+
+          // For now, we'll just use the temporary path
+          imagePath = _imageFile!.path;
+
+          // In a production app, implement proper storage:
+          // final appDir = await getApplicationDocumentsDirectory();
+          // final fileName = path.basename(_imageFile!.path);
+          // final savedImage = await _imageFile!.copy('${appDir.path}/$fileName');
+          // imagePath = savedImage.path;
+        } else if (_existingImagePath != null &&
+            !_defaultImages.contains(_existingImagePath)) {
+          // Keep existing custom image
+          imagePath = _existingImagePath!;
+        } else {
+          // Fallback to first default image
+          imagePath = _defaultImages[0];
+        }
+
         // Create recipe object
         final recipeData = {
           'name': _nameController.text,
@@ -108,8 +230,11 @@ class _RecipeScreenState extends State<RecipeScreen> {
           'cookTime': int.tryParse(_cookTimeController.text) ?? 0,
           'servings': int.tryParse(_servingsController.text) ?? 1,
           'ingredients': _ingredients,
-          'imageIndex': _selectedImageIndex,
-          'imagePath': _recipeImages[_selectedImageIndex],
+          'imageIndex':
+              _useDefaultImage
+                  ? _selectedDefaultImageIndex
+                  : -1, // -1 indicates custom image
+          'imagePath': imagePath,
         };
 
         final dbHelper = DatabaseHelper.instance;
@@ -189,17 +314,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Description field
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                hintText: 'Briefly describe your recipe',
-              ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 16),
-
             // Cooking time & servings row
             Row(
               children: [
@@ -228,57 +342,105 @@ class _RecipeScreenState extends State<RecipeScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Recipe image selection section
+            // Recipe image selection section - MODIFIED
             Text('Recipe Image', style: theme.textTheme.titleLarge),
             const SizedBox(height: 16),
 
-            SizedBox(
-              height: 120,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _recipeImages.length,
-                itemBuilder: (context, index) {
-                  final isSelected = index == _selectedImageIndex;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedImageIndex = index;
-                      });
-                    },
+            // Image preview and upload button
+            Center(
+              child: Column(
+                children: [
+                  // Image preview
+                  GestureDetector(
+                    onTap: _showImageSourceDialog,
                     child: Container(
-                      width: 100,
-                      margin: const EdgeInsets.only(right: 12),
+                      width: 200,
+                      height: 200,
                       decoration: BoxDecoration(
+                        border: Border.all(
+                          color: theme.colorScheme.primary,
+                          width: 2,
+                        ),
                         borderRadius: BorderRadius.circular(12),
-                        border:
-                            isSelected
-                                ? Border.all(
-                                  color: theme.colorScheme.primary,
-                                  width: 3,
-                                )
-                                : null,
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          _recipeImages[index],
-                          fit: BoxFit.contain,
-                          // Fallback if image not available
-                          errorBuilder:
-                              (context, error, stackTrace) => Container(
-                                color: theme.colorScheme.surfaceVariant,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.image,
-                                    color: theme.colorScheme.primary,
-                                  ),
-                                ),
-                              ),
-                        ),
+                        child: _buildImageWidget(theme),
                       ),
                     ),
-                  );
-                },
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Upload button
+                  ElevatedButton.icon(
+                    onPressed: _showImageSourceDialog,
+                    icon: const Icon(Icons.photo_camera),
+                    label: Text(
+                      _imageFile != null ||
+                              (_existingImagePath != null &&
+                                  !_defaultImages.contains(_existingImagePath))
+                          ? 'Change Image'
+                          : 'Upload Image',
+                    ),
+                  ),
+
+                  // Show default images option if using defaults
+                  if (_useDefaultImage) ...[
+                    const SizedBox(height: 16),
+                    const Text('Or select a default image:'),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _defaultImages.length,
+                        itemBuilder: (context, index) {
+                          final isSelected =
+                              index == _selectedDefaultImageIndex;
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedDefaultImageIndex = index;
+                                _useDefaultImage = true;
+                              });
+                            },
+                            child: Container(
+                              width: 80,
+                              margin: const EdgeInsets.only(right: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border:
+                                    isSelected
+                                        ? Border.all(
+                                          color: theme.colorScheme.primary,
+                                          width: 3,
+                                        )
+                                        : null,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: Image.asset(
+                                  _defaultImages[index],
+                                  fit: BoxFit.contain,
+                                  errorBuilder:
+                                      (context, error, stackTrace) => Container(
+                                        color: theme.colorScheme.surfaceVariant,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.image,
+                                            color: theme.colorScheme.primary,
+                                          ),
+                                        ),
+                                      ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
             const SizedBox(height: 24),
@@ -311,6 +473,75 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   showDelete: _ingredients.length > 1,
                 );
               },
+            ),
+
+            Text('Details', style: theme.textTheme.titleLarge),
+            const SizedBox(height: 16),
+            // Description field
+            TextFormField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Instructions',
+                hintText:
+                    'Briefly describe your recipe and explain recipe instruction',
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 64),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageWidget(ThemeData theme) {
+    if (_imageFile != null) {
+      // Show selected image from device
+      return Image.file(
+        _imageFile!,
+        fit: BoxFit.contain,
+        errorBuilder:
+            (context, error, stackTrace) => _buildErrorPlaceholder(theme),
+      );
+    } else if (_existingImagePath != null &&
+        !_defaultImages.contains(_existingImagePath)) {
+      // Show existing custom image
+      return Image.file(
+        File(_existingImagePath!),
+        fit: BoxFit.contain,
+        errorBuilder:
+            (context, error, stackTrace) => _buildErrorPlaceholder(theme),
+      );
+    } else if (_useDefaultImage) {
+      // Show selected default image
+      return Image.asset(
+        _defaultImages[_selectedDefaultImageIndex],
+        fit: BoxFit.contain,
+        errorBuilder:
+            (context, error, stackTrace) => _buildErrorPlaceholder(theme),
+      );
+    } else {
+      // Show placeholder
+      return _buildErrorPlaceholder(theme);
+    }
+  }
+
+  Widget _buildErrorPlaceholder(ThemeData theme) {
+    return Container(
+      color: theme.colorScheme.surfaceVariant,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.add_photo_alternate,
+              size: 48,
+              color: theme.colorScheme.primary,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Tap to add image',
+              style: TextStyle(color: theme.colorScheme.primary),
             ),
           ],
         ),

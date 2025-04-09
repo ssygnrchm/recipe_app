@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/authentication/presentation/pages/login_screen.dart';
-import 'package:food_delivery_app/presentation/pages/home_screen.dart';
+import 'package:food_delivery_app/features/authentication/presentation/pages/login_screen.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_button.dart';
 import 'package:food_delivery_app/presentation/widgets/custom_text.dart';
 // import 'package:food_delivery_app/theme/app_theme.dart';
