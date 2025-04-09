@@ -80,19 +80,29 @@ class RecipeListWidget extends StatelessWidget {
                     ),
                   ),
 
-                // Recipe details
-                Row(
+                // Recipe details with new chips
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
                   children: [
                     if (recipe.cookTime != null && recipe.cookTime! > 0)
                       Chip(
                         avatar: const Icon(Icons.timer_outlined, size: 16),
                         label: Text('${recipe.cookTime} min'),
                       ),
-                    const SizedBox(width: 8),
                     if (recipe.servings != null && recipe.servings! > 0)
                       Chip(
                         avatar: const Icon(Icons.people_outlined, size: 16),
                         label: Text('${recipe.servings} servings'),
+                      ),
+                    // Add category chip if available
+                    if (recipe.category != null && recipe.category!.isNotEmpty)
+                      _buildCategoryChip(recipe.category!, context),
+                    // Add area chip if available
+                    if (recipe.area != null && recipe.area!.isNotEmpty)
+                      Chip(
+                        avatar: const Icon(Icons.public, size: 16),
+                        label: Text(recipe.area!),
                       ),
                   ],
                 ),
@@ -191,6 +201,43 @@ class RecipeListWidget extends StatelessWidget {
           color: Theme.of(context).colorScheme.primary,
         ),
       ),
+    );
+  }
+
+  // Helper method to build a category chip with the appropriate icon and color
+  Widget _buildCategoryChip(String categoryName, BuildContext context) {
+    // Map of category icons
+    final Map<String, IconData> categoryIcons = {
+      'Beef': Icons.kebab_dining,
+      'Chicken': Icons.egg_alt,
+      'Dessert': Icons.cake,
+      'Lamb': Icons.kebab_dining,
+      'Pasta': Icons.ramen_dining,
+      'Seafood': Icons.set_meal_rounded,
+      'Breakfast': Icons.free_breakfast,
+      'Vegetarian': Icons.grass,
+    };
+
+    // Map of category colors
+    final Map<String, Color> categoryColors = {
+      'Beef': Colors.redAccent.shade100,
+      'Chicken': Colors.orangeAccent.shade100,
+      'Dessert': const Color.fromARGB(255, 224, 125, 158),
+      'Lamb': Colors.deepPurpleAccent.shade100,
+      'Pasta': const Color.fromARGB(255, 255, 174, 127),
+      'Seafood': Colors.blueAccent.shade100,
+      'Breakfast': Colors.tealAccent.shade100,
+      'Vegetarian': const Color.fromARGB(255, 123, 196, 143),
+    };
+
+    // Get icon and color for the category, or use defaults
+    final IconData icon = categoryIcons[categoryName] ?? Icons.category;
+    final Color color = categoryColors[categoryName] ?? Colors.grey.shade300;
+
+    return Chip(
+      avatar: Icon(icon, size: 16, color: Colors.white),
+      label: Text(categoryName, style: const TextStyle(color: Colors.white)),
+      backgroundColor: color,
     );
   }
 }

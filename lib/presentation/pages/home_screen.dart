@@ -199,26 +199,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 24),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText.h1(context, "My recipe"),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RecipeListScreen(),
-                          ),
-                        );
-                      },
-                      icon: Icon(Icons.arrow_forward),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     CustomText.h1(context, "My recipe"),
+                //     IconButton(
+                //       onPressed: () {
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => RecipeListScreen(),
+                //           ),
+                //         );
+                //       },
+                //       icon: Icon(Icons.arrow_forward),
+                //     ),
+                //   ],
+                // ),
 
-                const SizedBox(height: 16),
-                // My Recipe Section
+                // const SizedBox(height: 16),
+
+                //My Recipe Section
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
@@ -241,7 +242,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 24),
 
                 // Popular Categories Section

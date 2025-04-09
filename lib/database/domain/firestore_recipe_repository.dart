@@ -60,6 +60,8 @@ class FirestoreRecipeRepository {
       imagePath: imagePath,
       ingredients: recipe.ingredients,
       userId: recipe.userId,
+      area: recipe.area,
+      category: recipe.category,
     );
 
     // Add to Firestore
@@ -89,6 +91,8 @@ class FirestoreRecipeRepository {
       imagePath: imagePath,
       ingredients: recipe.ingredients,
       userId: recipe.userId,
+      area: recipe.area,
+      category: recipe.category,
     );
 
     // Update in Firestore

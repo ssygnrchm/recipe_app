@@ -12,6 +12,8 @@ class FirestoreRecipe {
   final List<FirestoreIngredient> ingredients;
   final Timestamp createdAt;
   final String userId; // Added userId field
+  final String? category; // New field for category
+  final String? area; // New field for area/country
 
   FirestoreRecipe({
     this.id,
@@ -23,6 +25,8 @@ class FirestoreRecipe {
     this.imagePath,
     required this.ingredients,
     required this.userId, // Make userId required
+    this.category, // Added category parameter
+    this.area, // Added area parameter
     Timestamp? createdAt,
   }) : this.createdAt = createdAt ?? Timestamp.now();
 
@@ -38,6 +42,8 @@ class FirestoreRecipe {
       'ingredients': ingredients.map((i) => i.toMap()).toList(),
       'createdAt': createdAt,
       'userId': userId, // Include userId in the map
+      'category': category, // Include category in the map
+      'area': area, // Include area in the map
     };
   }
 
@@ -67,6 +73,8 @@ class FirestoreRecipe {
       imagePath: data['imagePath'],
       ingredients: ingredientsList,
       userId: data['userId'] ?? '', // Extract userId with empty string fallback
+      category: data['category'], // Extract category with null fallback
+      area: data['area'], // Extract area with null fallback
       createdAt: data['createdAt'] as Timestamp,
     );
   }

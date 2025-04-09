@@ -46,6 +46,54 @@ class _RecipeScreenState extends State<RecipeScreen> {
   int _selectedDefaultImageIndex = 0;
   bool _useDefaultImage = true;
 
+  // Add these controllers and variables
+  final _areaController = TextEditingController();
+  String? _selectedCategory;
+
+  // Add the categories list
+  final List<Map<String, dynamic>> categories = [
+    {
+      "name": "Beef",
+      "icon": Icons.kebab_dining,
+      "color": Colors.redAccent.shade100,
+    },
+    {
+      "name": "Chicken",
+      "icon": Icons.egg_alt,
+      "color": Colors.orangeAccent.shade100,
+    },
+    {
+      "name": "Dessert",
+      "icon": Icons.cake,
+      "color": const Color.fromARGB(255, 224, 125, 158),
+    },
+    {
+      "name": "Lamb",
+      "icon": Icons.kebab_dining,
+      "color": Colors.deepPurpleAccent.shade100,
+    },
+    {
+      "name": "Pasta",
+      "icon": Icons.ramen_dining,
+      "color": const Color.fromARGB(255, 255, 174, 127),
+    },
+    {
+      "name": "Seafood",
+      "icon": Icons.set_meal_rounded,
+      "color": Colors.blueAccent.shade100,
+    },
+    {
+      "name": "Breakfast",
+      "icon": Icons.free_breakfast,
+      "color": Colors.tealAccent.shade100,
+    },
+    {
+      "name": "Vegetarian",
+      "icon": Icons.grass,
+      "color": const Color.fromARGB(255, 123, 196, 143),
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +134,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 ? _defaultImages.indexOf(_existingImagePath!)
                 : 0;
       }
+
+      // Initialize category and area
+      _selectedCategory = widget.existingRecipe!.category;
+      _areaController.text = widget.existingRecipe!.area ?? '';
     } else {
       // Add one empty ingredient for new recipes
       _ingredients.add({'name': '', 'amount': '', 'unit': 'g'});
@@ -98,6 +150,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
     _descriptionController.dispose();
     _cookTimeController.dispose();
     _servingsController.dispose();
+    _areaController.dispose();
     super.dispose();
   }
 
@@ -251,6 +304,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   : null, // We'll set this after upload for custom images
           ingredients: ingredientsList,
           userId: userId,
+          category: _selectedCategory, // Add category
+          area: _areaController.text.isNotEmpty ? _areaController.text : null,
         );
 
         // Check if we're updating or creating
@@ -350,6 +405,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
                     keyboardType: TextInputType.number,
                   ),
                 ),
+
                 const SizedBox(width: 16),
                 Expanded(
                   child: TextFormField(
@@ -363,6 +419,65 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 24),
+
+            // Category selection section
+            Text('Recipe Category', style: theme.textTheme.titleLarge),
+            const SizedBox(height: 16),
+
+            // Category dropdown
+            DropdownButtonFormField<String>(
+              value: _selectedCategory,
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                hintText: 'Select a category',
+                // prefixIcon: Icon(Icons.category),
+              ),
+              items: [
+                // Add a null option first
+                const DropdownMenuItem<String>(
+                  value: null,
+                  child: Text('None'),
+                ),
+                // Add all category options
+                ...categories.map((category) {
+                  return DropdownMenuItem<String>(
+                    value: category['name'],
+                    child: Row(
+                      children: [
+                        Icon(
+                          category['icon'] as IconData,
+                          color: category['color'] as Color,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(category['name']),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _selectedCategory = value;
+                });
+              },
+            ),
+
+            const SizedBox(height: 24),
+
+            // Area/Country input
+            Text('Area/Country', style: theme.textTheme.titleLarge),
+            const SizedBox(height: 16),
+
+            TextFormField(
+              controller: _areaController,
+              decoration: const InputDecoration(
+                labelText: 'Origin (e.g. Italian, Mexican, etc.)',
+                hintText: 'Enter the cuisine origin',
+                prefixIcon: Icon(Icons.public),
+              ),
+            ),
+
             const SizedBox(height: 24),
 
             // Recipe image selection section
